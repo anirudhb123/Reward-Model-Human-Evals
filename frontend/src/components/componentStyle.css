@@ -1,0 +1,140 @@
+.example {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.answer-row {
+  background-color: #f8f9fa; /* Light grey background for answer rows */
+}
+
+.checkbox-visible .form-check-input {
+  background-color: #ffffff; /* White background for checkboxes */
+  border-color: #000000; /* Black border for checkboxes */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.slider {
+  width: 100%;
+}
+
+.form-check-inline .form-check-input {
+  margin-right: 10px;
+}
+
+.custom-radio .form-check-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 50%;
+  width: 1.2em;
+  height: 1.2em;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.custom-radio .form-check-input:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.6em;
+  height: 0.6em;
+  background-color: #007bff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-radio .form-check-input::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border: 1px solid #01060c;
+  border-radius: 50%;
+}
+
+.overall-preference-card {
+  margin-top: 20px;
+  width: 90%;
+  background-color: #fff3cd;
+  font-size: 22px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.query-card {
+  margin-top: 20px;
+  width: 90%;
+  background-color: #c3d9ef;
+  font-size: 22px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.responses-container {
+  margin-top: 20px;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.response-card {
+  background-color: #e8f1fa;
+  font-size: 22px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sliders-container {
+  margin-top: 20px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.property-row {
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.property-row h5 {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.property-row .col {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+}
+
+.property-row .col .slider {
+  width: 80%;
+}
