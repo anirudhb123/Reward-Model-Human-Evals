@@ -1,6 +1,6 @@
 ### Description
 
-This repo contains the code for the annotation interface used for "ExpertQA: Expert-Curated Questions and Attributed Answers." You can find the paper here: https://arxiv.org/abs/2309.07852
+This repo contains the code for the annotation interface for human evaluation of language model responses.
 
 ### Installation
 
