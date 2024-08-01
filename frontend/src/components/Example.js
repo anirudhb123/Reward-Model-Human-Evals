@@ -60,7 +60,7 @@ const Example = (props) => {
                         <Card className="response-card">
                             <Card.Body>
                                 <Card.Title> {"Response 1:"} </Card.Title>
-                                <Card.Text>
+                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
                                     {<NewlineText text={props.response1} />}
                                 </Card.Text>
                             </Card.Body>
@@ -70,7 +70,7 @@ const Example = (props) => {
                         <Card className="response-card">
                             <Card.Body>
                                 <Card.Title> {"Response 2:"} </Card.Title>
-                                <Card.Text>
+                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
                                     {<NewlineText text={props.response2} />}
                                 </Card.Text>
                             </Card.Body>

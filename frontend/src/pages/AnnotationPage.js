@@ -118,7 +118,7 @@ const AnnotationPage = (props) => {
                 </ul>
                 
                 After evaluating the responses, please provide an <b>overall preference</b> for one of the two responses. If you find both responses equally good, you can select "Tie".
-                <br></br><br></br>
+                <br></br>
                 Current Example: {currentExample + 1} out of {data.length}
                 <ProgressBar
                     variant="primary"
