@@ -59,7 +59,7 @@ const WelcomePage = () => {
             <p>
               {" "}
               <br></br>
-              We are a group of researchers at the Allen Institute for Artificial Intelligence (AI2) researching better evaluation practices for
+              We are a group of researchers at the Allen Institute for Artificial Intelligence (Ai2) researching better evaluation practices for
               language model generations. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
             </p>
             Please enter your name below to begin:
