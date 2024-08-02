@@ -11,7 +11,7 @@ const OverallPreference = (props) => {
     };
 
     return (
-        <Card style={{ width: '75%', margin: '20px auto', padding: '20px' }} className="overall-preference-card">
+        <Card style={{ width: '70%', margin: '20px auto', padding: '20px' }} className="overall-preference-card">
             <Card.Body>
                 <Form>
                     <Form.Group as={Row} style={{ alignItems: 'center', fontSize: '1.2rem' }}>

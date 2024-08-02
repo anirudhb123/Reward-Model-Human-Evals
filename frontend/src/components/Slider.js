@@ -3,11 +3,15 @@ import { Card } from 'react-bootstrap';
 
 const Slider = (props) => {
     const changeFunction = (event) => {
+        const newValue = parseInt(event.target.value, 10);
         const newState = {
             ...props.state,
         };
-        newState[props.toChange] = parseInt(event.target.value, 10);
+        newState[props.toChange] = newValue;
         props.setState(newState);
+        if (props.onChange) {
+            props.onChange(newValue);
+        }
     };
 
     return (

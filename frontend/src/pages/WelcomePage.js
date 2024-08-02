@@ -62,14 +62,14 @@ const WelcomePage = () => {
               We are a group of researchers at the Allen Institute for Artificial Intelligence (Ai2) researching better evaluation practices for
               language model generations. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
             </p>
-            Please enter your name below to begin:
+            Please enter your Prolific ID below to begin:
             <Form
               style={{ marginTop: "10px", width: "400px" }}
               onSubmit={onClick}
             >
               <Form.Group className="mb-3">
                 <Form.Control
-                  placeholder="Enter name"
+                  placeholder="Enter Prolific ID"
                   onChange={(text) => setAnnotatorId(text.target.value)}
                 />
               </Form.Group>
