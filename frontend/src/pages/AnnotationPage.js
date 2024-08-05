@@ -9,6 +9,7 @@ const AnnotationPage = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const data = location.state.data;  // Ensure 'data' is provided via location state.
+    const annotatorId = location.state.annotatorId;  // Ensure 'annotatorId' is provided via location state.
     const [seconds, setSeconds] = useState(new Date());  // Initialize with a new Date object.
     const [currentExample, setCurrentExample] = useState(0);
     const emptyExample = {
@@ -56,6 +57,7 @@ const AnnotationPage = (props) => {
                     completeness_2: exampleAnnotation.completeness_2,
                     factual_correctness_2: exampleAnnotation.factual_correctness_2,
                     overall_preference: exampleAnnotation.overall_preference,
+                    annotator_id: annotatorId
                 })
                 .then((response) => {
                     // console.log(response)
@@ -110,26 +112,33 @@ const AnnotationPage = (props) => {
                 Each annotation task has 2 examples:
                 <ol>
                     <li> <b>Example 1</b>: You will be given a <b>query</b> and <b>two AI model responses</b>. </li>
-                    <li> <b>Example 2</b>: You will be given the same <b>query</b> and <b>follow-up question-answer pairs that provide further clarification about the query</b>, and <b>two AI model responses</b>. </li>
-                </ol>Your task is to rate the responses on a scale of 1-5 on the following criteria:
+                    <li> <b>Example 2</b>: You will be given the same <b>query</b> and <b>follow-up question-answer pairs that provide clarification about the query</b>, and <b>two AI model responses</b>. </li>
+                </ol>
+                <b>Steps in Annotation Task:</b><br></br><br></br>
+                <ol>
+                    <li>Read the query and the two responses carefully.</li><br></br>
+                <li>Rate each response on a scale of 1-5 on the following criteria:
+                    <br></br>
+                    <ul>
+                        <li><b>Instruction Following</b>: How well does the response follow all the instructions specified in the query as well as the follow-up questions?</li>
+                        <li><b>Depth</b>: How precise and thorough are the details in the response?</li>
+                        <li><b>Coherence</b>: How would you rate the logical flow of the response?</li>
+                        <li><b>Completeness</b>: How well does the response address all aspects of the query and follow-up questions?</li>
+                        <li><b>Factual Correctness</b>: How factually accurate and consistent is the information presented in the response?</li>
+                    </ul>
+                </li><br></br>
+                <li>Next, please provide an <b>overall preference</b> for one of the two responses. If you find both responses equally good, you can select "Tie".</li>
+                </ol>
                 <br></br>
-                <ul>
-                    <li><b>Instruction Following</b>: How well does the response follow all the instructions specified in the query as well as the follow-up questions?</li>
-                    <li><b>Depth</b>: How precise and thorough are the details in the response?</li>
-                    <li><b>Coherence</b>: How would you rate the logical flow of the response?</li>
-                    <li><b>Completeness</b>: How well does the response address all aspects of the query and follow-up questions?</li>
-                    <li><b>Factual Correctness</b>: How factually accurate and consistent is the information presented in the response?</li>
-                </ul>
-                
-                After evaluating the responses, please provide an <b>overall preference</b> for one of the two responses. If you find both responses equally good, you can select "Tie".
-                <br></br><br></br>
                 Current Example: {currentExample + 1} out of {data.length}
                 <ProgressBar
                     variant="primary"
                     now={((currentExample + 1) * 100.0) / data.length}
                     style={{ width: "38rem", marginTop: "20px", marginBottom: "20px" }}
                 />
-                Make sure to <b>follow the instructions carefully</b> and submit all the examples! You will get a completion code at the end of the task.
+                <b>Important Note</b>:
+                If you do not understand the query or if an error occurs in the interface, just go to the link again, enter your ID and you will be shown a different query.
+                Make sure to <b>follow the instructions carefully</b> and submit all the examples!<br></br>
             </Alert>
             <Example
                 query={data[currentExample].query}

@@ -27,8 +27,9 @@ app.get('/examples', (request, response) => {
 });
 
 // get all tasks from a specific annotator (given an id)
-app.get('/api/examples/:annotator_id', (request, response) => {
-   Example.find({annotator_id: request.params.annotator_id}).then(examples => {
+app.get('/api/examples', (request, response) => {
+   // Example.find({ annotator_id: request.params.annotator_id }).then(examples => {
+   Example.find({ completed: false }).then(examples => {
        response.json(examples);
    }).catch(error => response.json(error));
 });

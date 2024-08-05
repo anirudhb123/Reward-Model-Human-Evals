@@ -8,7 +8,8 @@ const WelcomePage = () => {
   const navigate = useNavigate();
   const [annotatorId, setAnnotatorId] = useState("");
   const [alert, setAlert] = useState(false);
-  const baseUrl = `/api/examples/${annotatorId}`;
+  // const baseUrl = `/api/examples/${annotatorId}`;
+  const baseUrl = `/api/examples`;
 
   const onClick = (e) => {
     e.preventDefault();
@@ -26,7 +27,20 @@ const WelcomePage = () => {
           if (todoExamples.length === 0) {
             navigate("/submission");
           } else {
-            navigate("/examples", { state: { data: todoExamples } });
+            // Get list of example IDs from todoExamples
+            const exampleIds = todoExamples.map((example) => example.example_id);
+            // Sample random example ID from the above list
+            const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
+            // Get examples with the above ID and store in exampleList
+            let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
+            const followUpItem = exampleList.find(example => example.query.includes("Responses to Follow-Up Questions"));
+            exampleList = exampleList.filter(example => !example.query.includes("Responses to Follow-Up Questions"));
+
+            // Ensure "Responses to Follow-Up Questions" item comes second if it exists
+            if (followUpItem) {
+              exampleList.splice(1, 0, followUpItem);
+            }
+            navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
           }
         }
       })
