@@ -8,10 +8,11 @@ import axios from "axios";
 const AnnotationPage = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const data = location.state.data;  // Ensure 'data' is provided via location state.
-    const annotatorId = location.state.annotatorId;  // Ensure 'annotatorId' is provided via location state.
-    const [seconds, setSeconds] = useState(new Date());  // Initialize with a new Date object.
+    const data = location.state.data;
+    const annotatorId = location.state.annotatorId;
+    const [seconds, setSeconds] = useState(new Date());
     const [currentExample, setCurrentExample] = useState(0);
+
     const emptyExample = {
         instruction_following_1: 3,
         depth_1: 3,
@@ -25,57 +26,74 @@ const AnnotationPage = (props) => {
         factual_correctness_2: 3,
         overall_preference: "",
     };
+
     const [exampleAnnotation, setExampleAnnotation] = useState(emptyExample);
     const [missingFields, setMissingFields] = useState([]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setSeconds(new Date());  // Update every second if necessary, else remove.
+            setSeconds(new Date());
         }, 1000);
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        setExampleAnnotation(emptyExample);
+    }, [currentExample]);
+
+    const validateAnnotations = () => {
+        const requiredFields = [
+            "instruction_following_1",
+            "depth_1",
+            "coherence_1",
+            "completeness_1",
+            "factual_correctness_1",
+            "instruction_following_2",
+            "depth_2",
+            "coherence_2",
+            "completeness_2",
+            "factual_correctness_2",
+            "overall_preference"
+        ];
+        const missing = requiredFields.filter(field => exampleAnnotation[field] === "" || exampleAnnotation[field] === null);
+
+        setMissingFields(missing);
+
+        return missing.length === 0;
+    };
+
     const handleButtonAction = () => {
-        return (() => {
-            if (missingFields.length > 0) {
-                setMissingFields([]);
-            }
-            const endTime = new Date();
+        if (!validateAnnotations()) {
+            return;
+        }
 
-            axios
-                .patch(`/api/annotate/example/${data[currentExample]._id}`, {
-                    completed: true,
-                    time_spent: endTime - seconds,
-                    instruction_following_1: exampleAnnotation.instruction_following_1,
-                    depth_1: exampleAnnotation.depth_1,
-                    coherence_1: exampleAnnotation.coherence_1,
-                    completeness_1: exampleAnnotation.completeness_1,
-                    factual_correctness_1: exampleAnnotation.factual_correctness_1,
-                    instruction_following_2: exampleAnnotation.instruction_following_2,
-                    depth_2: exampleAnnotation.depth_2,
-                    coherence_2: exampleAnnotation.coherence_2,
-                    completeness_2: exampleAnnotation.completeness_2,
-                    factual_correctness_2: exampleAnnotation.factual_correctness_2,
-                    overall_preference: exampleAnnotation.overall_preference,
-                    annotator_id: annotatorId
-                })
-                .then((response) => {
-                    // console.log(response)
-                })
-                .catch((error) => console.log(error));
+        const endTime = new Date();
+        const timeSpent = endTime - seconds;
+        const updateData = {
+            completed: true,
+            time_spent: timeSpent,
+            ...exampleAnnotation,
+            annotator_id: annotatorId
+        };
 
-            // rescroll & state updates
-            setSeconds(endTime);
-            window.scrollTo(0, 0);
+        axios
+            .patch(`/api/annotate/example/${data[currentExample]._id}`, updateData)
+            .then((response) => {
+                console.log('Data saved:', response.data);
+            })
+            .catch((error) => {
+                console.error('Error saving data:', error);
+            });
 
-            if (currentExample + 1 === data.length) {
-                setExampleAnnotation(emptyExample);
-                navigate("/submission");
-            }
-            else {
-                setCurrentExample(currentExample + 1);
-            }
-        })();
+        setSeconds(endTime);
+        window.scrollTo(0, 0);
+
+        if (currentExample + 1 === data.length) {
+            setCurrentExample(0);
+            navigate("/submission");
+        } else {
+            setCurrentExample(currentExample + 1);
+        }
     };
 
     const renderAlert = () => {
@@ -92,7 +110,7 @@ const AnnotationPage = (props) => {
         return (
             <Button
                 variant="outline-primary"
-                style={{ marginLeft: "20px", fontSize: "20px"}}
+                style={{ marginLeft: "20px", fontSize: "20px" }}
                 onClick={handleButtonAction}
             >
                 {currentExample < data.length - 1 ? "Submit Example" : "Submit Final Example"}
@@ -102,7 +120,7 @@ const AnnotationPage = (props) => {
 
     return (
         <div align="center">
-            <Alert style={{ width: "70%", marginTop: "20px", textAlign: "left", fontSize: 18}}>
+            <Alert style={{ width: "70%", marginTop: "20px", textAlign: "left", fontSize: 18 }}>
                 <h3> Evaluating Language Model Responses </h3>
                 <br></br>
                 Hello, and thank you for participating in our study! We are a group of researchers at the <a href="https://allenai.org/" target="_blank" rel="noreferrer">Allen Institute for Artificial Intelligence (Ai2)</a> building better methods for evaluating the quality of text generated by AI models like ChatGPT.

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Card, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Slider from "./Slider";
 import OverallPreference from "./OverallPreference";
@@ -14,20 +15,7 @@ function NewlineText({ text }) {
     return <>{newText}</>;
 }
 
-const Example = (props) => {
-    const [exampleAnnotation, setExampleAnnotation] = useState({
-        instruction_following_1: 3,
-        depth_1: 3,
-        coherence_1: 3,
-        completeness_1: 3,
-        factual_correctness_1: 3,
-        instruction_following_2: 3,
-        depth_2: 3,
-        coherence_2: 3,
-        completeness_2: 3,
-        factual_correctness_2: 3,
-        overall_preference: "",
-    });
+const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation }) => {
 
     const descriptions = {
         instruction_following: [
@@ -85,7 +73,6 @@ const Example = (props) => {
     );
 
     const handleSliderChange = (propertyKey, value) => {
-        console.log(`Slider changed: ${propertyKey} to value ${value}`); // Debugging line
         setExampleAnnotation(prevState => ({
             ...prevState,
             [propertyKey]: value
@@ -111,7 +98,7 @@ const Example = (props) => {
                 <Card.Body>
                     <Card.Title> {"Query:"} </Card.Title>
                     <Card.Text>
-                        {<NewlineText text={props.query} />}
+                        {<NewlineText text={query} />}
                     </Card.Text>
                 </Card.Body>
             </Card>
@@ -123,7 +110,7 @@ const Example = (props) => {
                             <Card.Body>
                                 <Card.Title> {"Response 1:"} </Card.Title>
                                 <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={props.response1} />}
+                                    {<NewlineText text={response1} />}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -133,7 +120,7 @@ const Example = (props) => {
                             <Card.Body>
                                 <Card.Title> {"Response 2:"} </Card.Title>
                                 <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={props.response2} />}
+                                    {<NewlineText text={response2} />}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -177,6 +164,15 @@ const Example = (props) => {
             />
         </div>
     );
+};
+
+
+Example.propTypes = {
+    query: PropTypes.string.isRequired,
+    response1: PropTypes.string.isRequired,
+    response2: PropTypes.string.isRequired,
+    exampleAnnotation: PropTypes.object.isRequired,
+    setExampleAnnotation: PropTypes.func.isRequired
 };
 
 export default Example;

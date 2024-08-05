@@ -52,6 +52,7 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
            'completeness_2': body.completeness_2,
            'factual_correctness_2': body.factual_correctness_2,
            'overall_preference': body.overall_preference,
+           'annotator_id': body.annotator_id,
        },
    },
    { new: true }
