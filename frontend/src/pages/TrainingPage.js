@@ -8,10 +8,10 @@ const trainingData = [
   {
     query: "How do antibiotics work against bacteria?",
     response1: "Antibiotics work by targeting specific features of bacterial cells. For example, some antibiotics interfere with the bacteria's ability to build their cell walls, which is essential for their survival. Others target the protein-making machinery of bacteria, thereby inhibiting their growth and reproduction. Some antibiotics disrupt the bacterial cell membrane, causing the contents to leak out, leading to cell death. Additionally, antibiotics can block the enzymes bacteria need to carry out critical functions. Each type of antibiotic has a specific mode of action, making it effective against certain types of bacteria.",
-    response2: "Antibiotics are drugs that kill bacteria or stop their growth. They are used to treat bacterial infections. For example, penicillin targets the cell wall of bacteria, making it burst. Antibiotics can also inhibit the protein synthesis of bacteria, stopping them from multiplying.",
+    response2: "Antibiotics are drugs that kill bacteria or stop their growth. They are used to treat bacterial infections. For example, penicillin targets the cell wall of bacteria, making it burst. Antibiotics can also stop bacteria from multiplying.",
     correctAnswers: {
       instruction_following_1: 5,
-      depth_1: 5,
+      depth_1: 3,
       coherence_1: 5,
       completeness_1: 5,
       factual_correctness_1: 5,
@@ -23,17 +23,17 @@ const trainingData = [
       overall_preference: "Response 1",
     },
     explanations: {
-      instruction_following_1: "Response 1 follows the instruction by explaining how antibiotics work against bacteria in detail.",
-      depth_1: "Response 1 provides detailed and thorough information about multiple mechanisms of antibiotics.",
+      instruction_following_1: "Response 1 follows the instruction by explaining how antibiotics work against bacteria.",
+      depth_1: "Response 1 provides sufficient information about multiple mechanisms of antibiotics, but it could use more detail about cellular mechanisms and different types of antibiotics.",
       coherence_1: "Response 1 is coherent and logically structured, making it easy to follow.",
-      completeness_1: "Response 1 addresses all aspects of the query comprehensively.",
+      completeness_1: "Response 1 addresses all aspects of the query.",
       factual_correctness_1: "Response 1 is factually accurate and consistent.",
-      instruction_following_2: "Response 2 does not follow the instruction well as it briefly mentions only a few mechanisms.",
+      instruction_following_2: "Response 2 does not follow the instruction well as it vaguely mentions only a few mechanisms.",
       depth_2: "Response 2 lacks depth as it provides superficial information and misses key points.",
       coherence_2: "Response 2 is somewhat coherent but lacks a logical structure.",
-      completeness_2: "Response 2 fails to address most aspects of the query.",
-      factual_correctness_2: "Response 2 contains some correct information but is mostly superficial.",
-      overall_preference: "Response 1 should be preferred as it is more comprehensive, coherent, and detailed."
+      completeness_2: "Response 2 fails to address most aspects of the query as it doesn't exactly explain how antibiotics function.",
+      factual_correctness_2: "Response 2 contains mostly correct information but it could be more accurate about the target mechanism of penicillin.",
+      overall_preference: "Response 1 should be preferred as it is more complete and detailed."
     }
   },
   {
@@ -42,11 +42,11 @@ const trainingData = [
     response2: "Antibiotics are drugs that kill bacteria or stop their growth. For example, penicillin targets the cell wall of bacteria, making it burst. Tetracycline inhibits protein synthesis in bacteria, stopping them from multiplying. Some antibiotics, like polymyxins, disrupt the bacterial cell membrane. Additionally, sulfonamides block the production of folic acid in bacteria. Antibiotic resistance happens when bacteria change and can resist the effects of the antibiotic. It's important to use antibiotics properly to avoid resistance. References: Smith et al., 2020.",
     correctAnswers: {
       instruction_following_1: 5,
-      depth_1: 5,
+      depth_1: 3,
       coherence_1: 5,
       completeness_1: 5,
       factual_correctness_1: 5,
-      instruction_following_2: 5,
+      instruction_following_2: 3,
       depth_2: 4,
       coherence_2: 4,
       completeness_2: 4,
@@ -55,16 +55,16 @@ const trainingData = [
     },
     explanations: {
       instruction_following_1: "Response 1 follows the instruction by explaining how antibiotics work against bacteria in detail, including examples, cellular mechanisms, and antibiotic resistance.",
-      depth_1: "Response 1 provides detailed and thorough information about multiple mechanisms of antibiotics, including examples and references.",
+      depth_1: "Response 1 provides detailed information about multiple mechanisms of antibiotics, but only one reference is cited and the paper is not named.",
       coherence_1: "Response 1 is coherent and logically structured, making it easy to follow.",
-      completeness_1: "Response 1 addresses all aspects of the query comprehensively.",
+      completeness_1: "Response 1 addresses all aspects of the query.",
       factual_correctness_1: "Response 1 is factually accurate and consistent.",
-      instruction_following_2: "Response 2 follows the instruction but lacks some depth compared to Response 1.",
+      instruction_following_2: "Response 2 follows the instruction but lacks depth that would be suitable for a medical expert. Also, it doesn't actually cite the one reference mentioned anywhere.",
       depth_2: "Response 2 provides detailed information but is not as thorough as Response 1.",
       coherence_2: "Response 2 is generally coherent but has minor issues with flow.",
       completeness_2: "Response 2 addresses most aspects of the query but with some minor gaps.",
       factual_correctness_2: "Response 2 is factually accurate and consistent.",
-      overall_preference: "Response 1 should be preferred as it is more comprehensive, coherent, and detailed."
+      overall_preference: "Response 1 should be preferred as it is more detailed and follows instructions better."
     }
   }
 ];
