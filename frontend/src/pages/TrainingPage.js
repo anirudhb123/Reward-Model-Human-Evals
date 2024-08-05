@@ -191,7 +191,7 @@ const TrainingPage = () => {
         </ol>
       </Alert>
       <Alert style={{ width: "70%", marginTop: "20px", textAlign: "left", fontSize: 18 }}>
-        <h2> Training Example {currentExample + 1} </h2>
+        <h2> Training Example {currentExample + 1} / 2</h2>
         <br />
         Before you begin the main annotation task, please review the following training example.
         This will help you understand how to evaluate the responses accurately.
