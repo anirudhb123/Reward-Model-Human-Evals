@@ -5,6 +5,8 @@ const example = new mongoose.Schema({
    query: String,
    response1: String,
    response2: String,
+   model_1: String,
+   model_2: String,
    instruction_following_1: Number,
    depth_1: Number,
    coherence_1: Number,
@@ -21,4 +23,4 @@ const example = new mongoose.Schema({
 });
 
 // modify the 3rd parameter to specify which MongoDB collection to use
-module.exports = mongoose.model("Example", example, "human-eval-sample");
+module.exports = mongoose.model("Example", example, "human-eval");

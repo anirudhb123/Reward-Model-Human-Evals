@@ -8,22 +8,25 @@ const WelcomePage = () => {
   const navigate = useNavigate();
   const [annotatorId, setAnnotatorId] = useState("");
   const [alert, setAlert] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // const baseUrl = `/api/examples/${annotatorId}`;
   const baseUrl = `/api/examples`;
 
   const onClick = (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);  // Set submitting state to true to prevent multiple clicks
     axios
       .get(baseUrl)
       .then((response) => {
         console.log(response.data);
         if (response.data.length === 0) {
           setAlert(true);
+          setIsSubmitting(false);  // Re-enable the button
         } else {
           const todoExamples = response.data.filter(
             (example) => !example.completed
           );
-          console.log(todoExamples);
           if (todoExamples.length === 0) {
             navigate("/submission");
           } else {
@@ -33,8 +36,8 @@ const WelcomePage = () => {
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
             let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
-            const followUpItem = exampleList.find(example => example.query.includes("Responses to Follow-Up Questions"));
-            exampleList = exampleList.filter(example => !example.query.includes("Responses to Follow-Up Questions"));
+            const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
+            exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
 
             // Ensure "Responses to Follow-Up Questions" item comes second if it exists
             if (followUpItem) {
@@ -43,11 +46,16 @@ const WelcomePage = () => {
             // navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
             // Navigate to training page if it's the first task
             navigate("/training", { state: { data: exampleList, annotatorId: annotatorId } });
+            setIsSubmitting(false);  // Re-enable the button
             // navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
           }
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error("Failed to fetch examples:", error);
+        alert("An error occurred while fetching examples. Please try again.");
+        setIsSubmitting(false);  // Re-enable the button
+      });
   };
 
   const renderAlert = () => {
@@ -58,7 +66,7 @@ const WelcomePage = () => {
           style={{ width: "50rem", marginTop: "20px", textAlign: "left" }}
         >
           {" "}
-          No examples match the provided ID in the database{" "}
+          No examples available at the moment{" "}
         </Alert>
       );
     }
@@ -98,10 +106,10 @@ const WelcomePage = () => {
       <Button
         variant="outline-primary"
         onClick={onClick}
+        disabled={isSubmitting}  // Disable button while submitting
         style={{ marginTop: "20px" }}
       >
-        {" "}
-        Submit and start study{" "}
+        {isSubmitting ? "Loading..." : "Submit and start study"}
       </Button>
     </div>
   );
