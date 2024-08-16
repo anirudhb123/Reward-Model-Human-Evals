@@ -10,20 +10,21 @@ const AnnotationPage = (props) => {
     const location = useLocation();
     const data = location.state.data;
     const annotatorId = location.state.annotatorId;
+    const mode = data[0].mode;  // Get mode from location state
     const [seconds, setSeconds] = useState(new Date());
     const [currentExample, setCurrentExample] = useState(0);
 
     const emptyExample = {
-        relevance_1: 3,
-        helpfulness_1: 3,
-        depth_1: 3,
-        factual_correctness_1: 3,
-        coherence_1: 3,
-        relevance_2: 3,
-        helpfulness_2: 3,
-        depth_2: 3,
-        factual_correctness_2: 3,
-        coherence_2: 3,
+        relevance_1: mode === 'absolute' ? 3 : null,
+        helpfulness_1: mode === 'absolute' ? 3 : null,
+        depth_1: mode === 'absolute' ? 3 : null,
+        factual_correctness_1: mode === 'absolute' ? 3 : null,
+        coherence_1: mode === 'absolute' ? 3 : null,
+        relevance_2: mode === 'absolute' ? 3 : null,
+        helpfulness_2: mode === 'absolute' ? 3 : null,
+        depth_2: mode === 'absolute' ? 3 : null,
+        factual_correctness_2: mode === 'absolute' ? 3 : null,
+        coherence_2: mode === 'absolute' ? 3 : null,
         overall_preference: "",
     };
 
@@ -42,20 +43,36 @@ const AnnotationPage = (props) => {
     }, [currentExample]);
 
     const validateAnnotations = () => {
-        const requiredFields = [
-            "relevance_1",
-            "helpfulness_1",
-            "depth_1",
-            "factual_correctness_1",
-            "coherence_1",
-            "relevance_2",
-            "helpfulness_2",
-            "depth_2",
-            "factual_correctness_2",
-            "coherence_2",
-            "overall_preference"
-        ];
+        let requiredFields = [];
+        if (mode === 'pairwise') {
+            requiredFields = ["overall_preference"];
+        } else {
+            requiredFields = [
+                "relevance_1",
+                "helpfulness_1",
+                "depth_1",
+                "factual_correctness_1",
+                "coherence_1",
+                "relevance_2",
+                "helpfulness_2",
+                "depth_2",
+                "factual_correctness_2",
+                "coherence_2",
+            ];
+        }
         const missing = requiredFields.filter(field => exampleAnnotation[field] === "" || exampleAnnotation[field] === null);
+        if (currentExample === 1) {
+            // TODO: Add validation for follow-up QAs
+            // Validation for follow-up QAs
+            data[currentExample].follow_up_qas.forEach((qa, index) => {
+            if (qa.satisfied_1 === "" || qa.satisfied_1 === null) {
+                missing.push(`Follow-up QA ${index + 1} (Response 1)`);
+            }
+            if (qa.satisfied_2 === "" || qa.satisfied_2 === null) {
+                missing.push(`Follow-up QA ${index + 1} (Response 2)`);
+            }
+            });
+        }
 
         setMissingFields(missing);
 
@@ -73,7 +90,8 @@ const AnnotationPage = (props) => {
             completed: true,
             time_spent: timeSpent,
             ...exampleAnnotation,
-            annotator_id: annotatorId
+            annotator_id: annotatorId,
+            mode: mode
         };
 
         axios
@@ -137,21 +155,31 @@ const AnnotationPage = (props) => {
                 <b>Steps in the Annotation Task:</b><br></br><br></br>
                 <ol>
                     <li>Read the query, follow-up questions & answers (if provided) and the two responses carefully.</li><br></br>
-                <li>Rate each response on a scale of 1 to 5 based on the following criteria:
-                    <br></br>
-                    <ul>
-                        <li><b>Relevance</b>: How closely does the response stay on topic and directly address the query?</li>
-                        <li><b>Helpfulness</b>: How useful is the response in answering the query, while accounting for any follow-up questions and answers?</li>
-                        <li><b>Depth</b>: How detailed and thorough is the response?</li>
-                        <li><b>Factual Correctness</b>: How factually accurate is the information provided in the response?</li>
-                        <li><b>Coherence</b>: How logically structured and easy to follow is the response?</li>
-                    </ul>
-                </li><br></br>
-                <li>Finally, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie".</li>
+                    <li>(If follow-up QAs are provided) For each follow-up QA pair, evaluate whether the response incorporates the preference in the question-answer. If the response incorporates this preference, select "Yes". Otherwise, select "No".</li><br></br>
+                    {mode === 'absolute' && (
+                        <>
+                        <li>Rate each response on a scale of 1 to 5 based on the following criteria:
+                            <br></br>
+                            <ul>
+                                <li><b>Relevance</b>: How well does the response directly address the query and the requirements specified in the follow-up QAs (if any)? 
+                                * Note that the response does not need to be correct or detailed simply to be relevant.</li>
+                                <li><b>Helpfulness</b>: How useful do you think the user would find this response, given the query and preferences they specified in the follow-up QAs (if any)?</li>
+                                <li><b>Depth</b>: How detailed and thorough is the response?</li>
+                                <li><b>Factual Correctness</b>: How factually accurate is the information provided in the response?</li>
+                                <li><b>Coherence</b>: How logically structured and easy to follow is the response?</li>
+                            </ul>
+                        </li><br></br>
+                        </>
+                    )}
+                    {mode === 'pairwise' && (
+                        <>
+                        <li>Finally, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie".</li>
+                        </>
+                    )}
                 </ol>
                 <br />
                 Your thoughtful evaluations will help us better understand and improve the performance of AI models. Thank you for your participation!
-                <br></br>
+                <br></br><br></br>
                 Current Example: {currentExample + 1} out of {data.length}
                 <ProgressBar
                     variant="primary"
@@ -167,6 +195,9 @@ const AnnotationPage = (props) => {
                 response2={data[currentExample].response2}
                 exampleAnnotation={exampleAnnotation}
                 setExampleAnnotation={setExampleAnnotation}
+                mode={mode}
+                follow_up_qas={data[currentExample].follow_up_qas}
+                currentExample={currentExample}
             />
             {renderAlert()}
             <div className="buttons">{renderButton()}</div>

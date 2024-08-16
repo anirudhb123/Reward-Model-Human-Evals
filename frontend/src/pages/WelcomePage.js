@@ -45,9 +45,9 @@ const WelcomePage = () => {
             }
             // navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
             // Navigate to training page if it's the first task
-            navigate("/training", { state: { data: exampleList, annotatorId: annotatorId } });
+            // navigate("/training", { state: { data: exampleList, annotatorId: annotatorId } });
             setIsSubmitting(false);  // Re-enable the button
-            // navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
+            navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
           }
         }
       })

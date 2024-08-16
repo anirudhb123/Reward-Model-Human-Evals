@@ -182,8 +182,9 @@ const TrainingPage = () => {
             <li>Rate each response on a scale of 1 to 5 based on the following criteria:
                 <br></br>
                 <ul>
-                    <li><b>Relevance</b>: How closely does the response stay on topic and directly address the query?</li>
-                    <li><b>Helpfulness</b>: How useful is the response in answering the query, while accounting for any follow-up questions and answers?</li>
+                    <li><b>Relevance</b>: How well does the response directly address the query and the requirements specified in the follow-up QAs (if any)? <br />
+                    * Note that the response does not need to be correct or detailed simply to be relevant.</li>
+                    <li><b>Helpfulness</b>: How useful do you think the user would find this response, given the query and preferences they specified in the follow-up QAs (if any)?</li>
                     <li><b>Depth</b>: How detailed and thorough is the response?</li>
                     <li><b>Factual Correctness</b>: How factually accurate is the information provided in the response?</li>
                     <li><b>Coherence</b>: How logically structured and easy to follow is the response?</li>

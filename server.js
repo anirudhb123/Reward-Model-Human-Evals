@@ -53,6 +53,8 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
            'coherence_2': body.coherence_2,
            'overall_preference': body.overall_preference,
            'annotator_id': body.annotator_id,
+           'mode': body.mode,
+           'follow_up_qas': body.follow_up_qas
        },
    },
    { new: true }

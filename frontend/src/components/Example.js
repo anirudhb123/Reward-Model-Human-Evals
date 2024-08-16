@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Card, Container, Row, Col, OverlayTrigger, Tooltip, Form, Table } from 'react-bootstrap';
 import Slider from "./Slider";
 import OverallPreference from "./OverallPreference";
 import "./componentStyle.css";
@@ -15,48 +15,48 @@ function NewlineText({ text }) {
     return <>{newText}</>;
 }
 
-const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation }) => {
+const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation, mode, follow_up_qas, currentExample }) => {
 
     const descriptions = {
         relevance: [
-            "The response is not relevant to the query.",
-            "The response has minimal relevance, addressing some parts of the query but missing the main point.",
-            "The response is somewhat relevant, addressing the main points but missing some details.",
-            "The response is mostly relevant, covering almost all key aspects of the query.",
-            "The response is completely relevant, fully addressing the query."
+            "The response does not address the query or related preferences at all.",
+            "The response addresses the query or preferences very minimally, missing the core aspects.",
+            "The response somewhat addresses the query or preferences, covering some important points but lacking key details.",
+            "The response mostly addresses the query or preferences, with minor omissions.",
+            "The response fully addresses the query or preferences, covering all key aspects."
         ],
         helpfulness: [
-            "The response is not helpful at all.",
-            "The response provides limited help, missing key information or context.",
-            "The response is somewhat helpful, providing some useful information but lacking thoroughness.",
-            "The response is helpful, offering useful and relevant information with minor gaps.",
-            "The response is extremely helpful, fully addressing the query and follow-up questions."
+            "The response is not helpful in addressing the query or preferences.",
+            "The response provides limited help, missing important context or useful information.",
+            "The response is somewhat helpful, offering useful information but lacking thoroughness or depth.",
+            "The response is helpful, covering most of the query or preferences adequately.",
+            "The response is highly helpful, fully addressing the query or preferences with thorough and useful information."
         ],
         depth: [
-            "The response is very superficial, providing minimal detail and lacking depth.",
-            "The response offers some details but lacks thoroughness and precision.",
-            "The response provides adequate detail, covering the main points with some depth.",
-            "The response is detailed and thorough, covering most aspects with significant depth.",
-            "The response is highly detailed, precise, and thorough."
+            "The response is very shallow, providing minimal information or detail.",
+            "The response offers some detail but is largely superficial and lacks depth.",
+            "The response provides an adequate level of detail, covering the main points with moderate depth.",
+            "The response is detailed, covering most aspects of the query or preferences with significant depth.",
+            "The response is very thorough, covering all aspects with great depth."
         ],
         factual_correctness: [
-            "The response contains multiple factual errors and inconsistencies.",
-            "The response has some factual inaccuracies but also contains correct information.",
-            "The response is mostly factually accurate with a few minor errors.",
-            "The response is factually accurate with only very minor, infrequent errors.",
-            "The response is completely factually accurate and consistent with no errors."
+            "The response contains multiple factual errors or inaccuracies.",
+            "The response has some factual inaccuracies, though it also includes some correct information.",
+            "The response is mostly accurate with only a few minor factual errors.",
+            "The response is accurate with very minor and infrequent errors.",
+            "The response is entirely accurate, with no factual errors."
         ],
         coherence: [
-            "The response is disjointed and difficult to follow, with poor logical flow.",
-            "The response has some logical flow but includes noticeable inconsistencies or jumps.",
-            "The response is generally coherent but may have minor issues with flow or logical consistency.",
-            "The response is coherent with a clear logical flow and only minor, infrequent issues.",
-            "The response is completely coherent, with a logical and easy-to-follow structure."
+            "The response is incoherent, with poor logical flow or difficult to understand.",
+            "The response has some coherence, but includes noticeable inconsistencies or logical gaps.",
+            "The response is generally coherent, but may have minor issues with flow or clarity.",
+            "The response is coherent, with a clear logical flow and only minor issues.",
+            "The response is completely coherent, with a clear, logical, and easy-to-follow structure."
         ],
     };
 
     const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
-        if (key !== "overall_preference") {
+        if (mode == "absolute" && key !== "overall_preference") {
             const baseKey = key.slice(0, -2);
             const value = exampleAnnotation[key];
             acc[key] = descriptions[baseKey][value - 1];
@@ -84,9 +84,19 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
         }));
     };
 
+    const handleRadioChange = (qaIndex, responseKey, value) => {
+        const updatedFollowUpQAs = [...follow_up_qas];
+        updatedFollowUpQAs[qaIndex][responseKey] = value;
+        console.log(updatedFollowUpQAs);
+        setExampleAnnotation(prevState => ({
+            ...prevState,
+            follow_up_qas: updatedFollowUpQAs
+        }));
+    };
+
     const properties = [
-        { title: "Relevance", key1: "relevance_1", key2: "relevance_2", description: "How closely does the response stay on topic and directly address the query?" },
-        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful is the response in answering the query, while accounting for any follow-up questions and answers?" },
+        { title: "Relevance", key1: "relevance_1", key2: "relevance_2", description: "How well does the response directly address the query and the requirements specified in the follow-up QAs (if any)?" },
+        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response, given the preferences they specified in the follow-up QAs?" },
         { title: "Depth", key1: "depth_1", key2: "depth_2", description: "How detailed and thorough is the response?" },
         { title: "Factual Correctness", key1: "factual_correctness_1", key2: "factual_correctness_2", description: "How factually accurate is the information provided in the response?" },
         { title: "Coherence", key1: "coherence_1", key2: "coherence_2", description: "How logically structured and easy to follow is the response?" },
@@ -128,40 +138,111 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 </Row>
             </Container>
 
-            <Container fluid style={{ marginTop: '20px', width: "85%", marginLeft: 'auto', marginRight: 'auto' }}>
-                {properties.map((property) => (
-                    <Row key={property.title} style={{ alignItems: 'center', marginBottom: '20px' }}>
-                        <OverlayTrigger overlay={renderTooltip(property.description)}>
-                            <Col xs={1}><h5>{property.title}</h5></Col>
-                        </OverlayTrigger>
-                        <Col xs={5}>
-                            <Slider
-                                state={exampleAnnotation}
-                                setState={setExampleAnnotation}
-                                toChange={property.key1}
-                                onChange={(value) => handleSliderChange(property.key1, value)}
-                            />
-                            <p>{activeDescriptions[property.key1]}</p>
-                        </Col>
-                        <Col xs={5}>
-                            <Slider
-                                state={exampleAnnotation}
-                                setState={setExampleAnnotation}
-                                toChange={property.key2}
-                                onChange={(value) => handleSliderChange(property.key2, value)}
-                            />
-                            <p>{activeDescriptions[property.key2]}</p>
-                        </Col>
-                    </Row>
-                ))}
-            </Container>
+            {currentExample === 1 && (
+                <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
+                    <h5 style={{ textAlign: "left" }}>Are the requirements or preferences in this question-answer pair incorporated in the response?</h5><br />
+                    <Table bordered hover>
+                        <tbody>
+                            {follow_up_qas.map((qaPair, index) => (
+                                <React.Fragment key={index}>
+                                    <tr>
+                                        <td colSpan={3} style={{ backgroundColor: '#f8f9fa', textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
+                                            <h6 style={{ margin: '10px 0' }}>{qaPair.qa}</h6>
+                                        </td>
+                                    </tr>
+                                    {/* Response Options aligned under each response */}
+                                    <tr>
+                                        <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
+                                            <Form.Check
+                                                type="radio"
+                                                label="Yes"
+                                                name={`satisfied_1_${index}`}
+                                                id={`satisfied_1_${index}`}
+                                                value={true}
+                                                // checked={qaPair.satisfied_1 === true}
+                                                onChange={() => handleRadioChange(index, 'satisfied_1', true)}
+                                                inline
+                                            />
+                                            <Form.Check
+                                                type="radio"
+                                                label="No"
+                                                name={`satisfied_1_${index}`}
+                                                id={`not_satisfied_1_${index}`}
+                                                value={false}
+                                                // checked={qaPair.satisfied_1 === false}
+                                                onChange={() => handleRadioChange(index, 'satisfied_1', false)}
+                                                inline
+                                            />
+                                        </td>
+                                        <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
+                                            <Form.Check
+                                                type="radio"
+                                                label="Yes"
+                                                name={`satisfied_2_${index}`}
+                                                id={`satisfied_2_${index}`}
+                                                value={true}
+                                                // checked={qaPair.satisfied_2 === true}
+                                                onChange={() => handleRadioChange(index, 'satisfied_2', true)}
+                                                inline
+                                            />
+                                            <Form.Check
+                                                type="radio"
+                                                label="No"
+                                                name={`satisfied_2_${index}`}
+                                                id={`not_satisfied_2_${index}`}
+                                                value={false}
+                                                // checked={qaPair.satisfied_2 === false}
+                                                onChange={() => handleRadioChange(index, 'satisfied_2', false)}
+                                                inline
+                                            />
+                                        </td>
+                                    </tr>
+                                </React.Fragment>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Container>
+            )}
 
-            <OverallPreference
-                title="Overall Preference"
-                state={exampleAnnotation}
-                setState={setExampleAnnotation}
-                toChange="overall_preference"
-            />
+            {mode === 'absolute' && (
+                <Container fluid style={{ marginTop: '20px', width: "85%", marginLeft: 'auto', marginRight: 'auto' }}>
+                    <h5>Rate the above responses on the following criteria.</h5><br />
+                    {properties.map((property) => (
+                        <Row key={property.title} style={{ alignItems: 'center', marginBottom: '20px' }}>
+                            <OverlayTrigger overlay={renderTooltip(property.description)}>
+                                <Col xs={1}><h5>{property.title}</h5></Col>
+                            </OverlayTrigger>
+                            <Col xs={5}>
+                                <Slider
+                                    state={exampleAnnotation}
+                                    setState={setExampleAnnotation}
+                                    toChange={property.key1}
+                                    onChange={(value) => handleSliderChange(property.key1, value)}
+                                />
+                                <p>{activeDescriptions[property.key1]}</p>
+                            </Col>
+                            <Col xs={5}>
+                                <Slider
+                                    state={exampleAnnotation}
+                                    setState={setExampleAnnotation}
+                                    toChange={property.key2}
+                                    onChange={(value) => handleSliderChange(property.key2, value)}
+                                />
+                                <p>{activeDescriptions[property.key2]}</p>
+                            </Col>
+                        </Row>
+                    ))}
+                </Container>
+            )}
+
+            {mode === 'pairwise' && (
+                <OverallPreference
+                    title="Overall Preference"
+                    state={exampleAnnotation}
+                    setState={setExampleAnnotation}
+                    toChange="overall_preference"
+                />
+            )}
         </div>
     );
 };
@@ -172,7 +253,15 @@ Example.propTypes = {
     response1: PropTypes.string.isRequired,
     response2: PropTypes.string.isRequired,
     exampleAnnotation: PropTypes.object.isRequired,
-    setExampleAnnotation: PropTypes.func.isRequired
+    setExampleAnnotation: PropTypes.func.isRequired,
+    mode: PropTypes.string.isRequired,  // Add mode prop
+    follow_up_qas: PropTypes.arrayOf(
+        PropTypes.shape({
+            qa: PropTypes.string.isRequired,
+            satisfied_1: PropTypes.bool,
+            satisfied_2: PropTypes.bool,
+        })
+    ).isRequired
 };
 
 export default Example;
