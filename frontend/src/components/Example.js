@@ -127,7 +127,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
                     <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
                         <Card.Body>
-                            <Card.Title> {"Shown below are follow-up questions and the person X's answers to these questions. Answer below whether the answers to each follow-up question are incorporated in the response."} </Card.Title>
+                            <Card.Title> {"Shown below are follow-up questions and the person X's answers to these questions. Indicate below whether the answers to each follow-up question are incorporated in the response."} </Card.Title>
                         </Card.Body>
                     </Card><br />
                     <Table bordered hover>
