@@ -59,10 +59,17 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
     const split_query = query.slice(0, queryEnd).trim();
 
     const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
-        if (mode == "absolute" && key !== "overall_preference") {
+        if (mode === "absolute" && key in descriptions ) {
             const baseKey = key.slice(0, -2);
             const value = exampleAnnotation[key];
-            acc[key] = descriptions[baseKey][value - 1];
+            if (value !== null && value !== undefined) {  // Check for null or undefined
+                console.log(baseKey, value);
+                acc[key] = descriptions[baseKey][value - 1];
+            } else {
+                acc[key] = null;  // Set to null if the value is null or undefined
+            }
+        } else {
+            acc[key] = null;
         }
         return acc;
     }, {});
@@ -116,34 +123,8 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 </Card.Body>
             </Card>
 
-            <Container fluid style={{ marginTop: '20px', width: "70%" }} className="responses-container">
-                <Row>
-                    <Col>
-                        <Card className="response-card">
-                            <Card.Body>
-                                <Card.Title> {"Response 1:"} </Card.Title>
-                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={response1} />}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Card className="response-card">
-                            <Card.Body>
-                                <Card.Title> {"Response 2:"} </Card.Title>
-                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={response2} />}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
-
             {currentExample === 1 && (
                 <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    {/* <h5 style={{ textAlign: "left" }}>Are the requirements or preferences in this question-answer pair incorporated in the response?</h5><br /> */}
                     <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
                         <Card.Body>
                             <Card.Title> {"Shown below are follow-up questions and the person X's answers to these questions. Answer below whether the answers to each follow-up question are incorporated in the response."} </Card.Title>
@@ -213,6 +194,31 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                     </Table>
                 </Container>
             )}
+
+            <Container fluid style={{ marginTop: '20px', width: "70%" }} className="responses-container">
+                <Row>
+                    <Col>
+                        <Card className="response-card">
+                            <Card.Body>
+                                <Card.Title> {"Response 1:"} </Card.Title>
+                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
+                                    {<NewlineText text={response1} />}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className="response-card">
+                            <Card.Body>
+                                <Card.Title> {"Response 2:"} </Card.Title>
+                                <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
+                                    {<NewlineText text={response2} />}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
 
             {mode === 'absolute' && (
                 <Container fluid style={{ marginTop: '20px', width: "85%", marginLeft: 'auto', marginRight: 'auto' }}>

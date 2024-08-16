@@ -10,7 +10,7 @@ const AnnotationPage = (props) => {
     const location = useLocation();
     const data = location.state.data;
     const annotatorId = location.state.annotatorId;
-    const mode = data[0].mode;  // Get mode from location state
+    const mode = data[0].mode;
     const [seconds, setSeconds] = useState(new Date());
     const [currentExample, setCurrentExample] = useState(0);
 
@@ -75,7 +75,6 @@ const AnnotationPage = (props) => {
         }
 
         setMissingFields(missing);
-
         return missing.length === 0;
     };
 
