@@ -55,6 +55,9 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
         ],
     };
 
+    const queryEnd = query.indexOf('Follow-Up Questions and Answers:');
+    const split_query = query.slice(0, queryEnd).trim();
+
     const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
         if (mode == "absolute" && key !== "overall_preference") {
             const baseKey = key.slice(0, -2);
@@ -104,11 +107,11 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
     return (
         <div>
-            <Card style={{ width: "70%" }} className="query-card">
+            <Card style={{ width: "70%", backgroundColor: '#AED5B3'}} className="query-card">
                 <Card.Body>
                     <Card.Title> {"Query:"} </Card.Title>
                     <Card.Text>
-                        {<NewlineText text={query} />}
+                        {<NewlineText text={split_query} />}
                     </Card.Text>
                 </Card.Body>
             </Card>
@@ -140,7 +143,12 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
             {currentExample === 1 && (
                 <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    <h5 style={{ textAlign: "left" }}>Are the requirements or preferences in this question-answer pair incorporated in the response?</h5><br />
+                    {/* <h5 style={{ textAlign: "left" }}>Are the requirements or preferences in this question-answer pair incorporated in the response?</h5><br /> */}
+                    <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
+                        <Card.Body>
+                            <Card.Title> {"Shown below are follow-up questions and the person X's answers to these questions. Answer below whether the answers to each follow-up question are incorporated in the response."} </Card.Title>
+                        </Card.Body>
+                    </Card><br />
                     <Table bordered hover>
                         <tbody>
                             {follow_up_qas.map((qaPair, index) => (
@@ -153,6 +161,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                                     {/* Response Options aligned under each response */}
                                     <tr>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
+                                        <p style={{display:'inline'}}>Response 1:  </p>
                                             <Form.Check
                                                 type="radio"
                                                 label="Yes"
@@ -175,6 +184,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                                             />
                                         </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
+                                        <p style={{display:'inline'}}>Response 2:  </p>
                                             <Form.Check
                                                 type="radio"
                                                 label="Yes"
@@ -206,7 +216,11 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
             {mode === 'absolute' && (
                 <Container fluid style={{ marginTop: '20px', width: "85%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    <h5>Rate the above responses on the following criteria.</h5><br />
+                    <Card style={{ width: "80%", backgroundColor: '#AED5B3'}} className="query-card">
+                        <Card.Body>
+                            <Card.Title> {"Now rate the above two responses on the following criteria."} </Card.Title>
+                        </Card.Body>
+                    </Card><br />
                     {properties.map((property) => (
                         <Row key={property.title} style={{ alignItems: 'center', marginBottom: '20px' }}>
                             <OverlayTrigger overlay={renderTooltip(property.description)}>
