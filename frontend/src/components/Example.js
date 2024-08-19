@@ -18,33 +18,33 @@ function NewlineText({ text }) {
 const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation, mode, follow_up_qas, currentExample }) => {
 
     const descriptions = {
-        relevance: [
-            "The response does not address the query or related preferences at all.",
-            "The response addresses the query or preferences very minimally, missing the core aspects.",
-            "The response somewhat addresses the query or preferences, covering some important points but lacking key details.",
-            "The response mostly addresses the query or preferences, with minor omissions.",
-            "The response fully addresses the query or preferences, covering all key aspects."
+        suitability: [
+            "The response does not address the query or follow-up questions at all.",
+            "The response addresses the query or follow-up questions very minimally, missing the core aspects.",
+            "The response somewhat addresses the query or follow-up questions, covering some important points but lacking key details.",
+            "The response mostly addresses the query or follow-up questions, with minor omissions.",
+            "The response fully addresses the query or follow-up questions, covering all key aspects."
         ],
         helpfulness: [
-            "The response is not helpful in addressing the query or preferences.",
+            "The response is not helpful in addressing the query or follow-up questions.",
             "The response provides limited help, missing important context or useful information.",
-            "The response is somewhat helpful, offering useful information but lacking thoroughness or depth.",
-            "The response is helpful, covering most of the query or preferences adequately.",
-            "The response is highly helpful, fully addressing the query or preferences with thorough and useful information."
+            "The response is somewhat helpful, offering useful information but lacking specific details.",
+            "The response is helpful, covering most of the query or follow-up questions adequately.",
+            "The response is highly helpful, fully addressing the query or follow-up questions with thorough and useful information."
         ],
-        depth: [
+        specificity: [
             "The response is very shallow, providing minimal information or detail.",
-            "The response offers some detail but is largely superficial and lacks depth.",
-            "The response provides an adequate level of detail, covering the main points with moderate depth.",
-            "The response is detailed, covering most aspects of the query or preferences with significant depth.",
-            "The response is very thorough, covering all aspects with great depth."
+            "The response offers some detail but is largely superficial and lacks detail.",
+            "The response provides an adequate level of detail, covering the main points with moderate detail.",
+            "The response is detailed, covering most aspects of the query or follow-up questions with significant detail.",
+            "The response is very specific, covering all aspects with great detail."
         ],
-        factual_correctness: [
-            "The response contains multiple factual errors or inaccuracies.",
-            "The response has some factual inaccuracies, though it also includes some correct information.",
-            "The response is mostly accurate with only a few minor factual errors.",
+        correctness: [
+            "The response contains multiple errors or inaccuracies.",
+            "The response has some inaccuracies, though it also includes some correct information.",
+            "The response is mostly accurate with only a few minor errors.",
             "The response is accurate with very minor and infrequent errors.",
-            "The response is entirely accurate, with no factual errors."
+            "The response is entirely accurate, with no errors."
         ],
         coherence: [
             "The response is incoherent, with poor logical flow or difficult to understand.",
@@ -104,11 +104,19 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
         }));
     };
 
+    const handleJustificationChange = (event) => {
+        const value = event.target.value;
+        setExampleAnnotation(prevState => ({
+            ...prevState,
+            justification: value
+        }));
+    };
+
     const properties = [
-        { title: "Relevance", key1: "relevance_1", key2: "relevance_2", description: "How well does the response directly address the query and the requirements specified in the follow-up QAs (if any)?" },
+        { title: "Suitability", key1: "suitability_1", key2: "suitability_2", description: "How suitable is the response in directly addressing the query and the requirements specified in the follow-up QAs (if any)?" },
         { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response, given the preferences they specified in the follow-up QAs?" },
-        { title: "Depth", key1: "depth_1", key2: "depth_2", description: "How detailed and thorough is the response?" },
-        { title: "Factual Correctness", key1: "factual_correctness_1", key2: "factual_correctness_2", description: "How factually accurate is the information provided in the response?" },
+        { title: "Specificity", key1: "specificity_1", key2: "specificity_2", description: "How detailed and thorough is the response?" },
+        { title: "Correctness", key1: "correctness_1", key2: "correctness_2", description: "How accurate is the information provided in the response?" },
         { title: "Coherence", key1: "coherence_1", key2: "coherence_2", description: "How logically structured and easy to follow is the response?" },
     ];
 
@@ -127,7 +135,12 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
                     <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
                         <Card.Body>
-                            <Card.Title> {"Shown below are follow-up questions and the person X's answers to these questions. Indicate below whether the answers to each follow-up question are incorporated in the response."} </Card.Title>
+                        <Card.Title> {"Follow-Up Questions and Answers:"} </Card.Title>
+                        <Card.Title>
+                            {"Shown below are follow-up questions and the person X's answers to these questions."}
+                            <br />
+                            {"Do the responses incorporate the answer to each follow-up question?"}
+                        </Card.Title>
                         </Card.Body>
                     </Card><br />
                     <Table bordered hover>
@@ -263,6 +276,19 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                     toChange="overall_preference"
                 />
             )}
+
+            <Container fluid style={{ marginTop: '20px', width: "70%" }}>
+                <Form.Group controlId="justification">
+                    <Form.Label style={{ textAlign: 'left', fontSize: '20px' }}>Justification: Please provide a brief (2-3 sentences) reason for your judgement of the responses.</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="Justification of your judgement."
+                        value={exampleAnnotation.justification || ''}
+                        onChange={handleJustificationChange}
+                    />
+                </Form.Group>
+            </Container>
         </div>
     );
 };
