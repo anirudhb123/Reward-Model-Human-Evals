@@ -56,7 +56,12 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
     };
 
     const queryEnd = query.indexOf('Follow-Up Questions and Answers:');
-    const split_query = query.slice(0, queryEnd).trim();
+    let split_query;
+    if (queryEnd !== -1) {
+        split_query = query.slice(0, queryEnd).trim();
+    } else {
+        split_query = query.trim();
+    }
 
     const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
         if (mode === "absolute" && key in descriptions ) {
