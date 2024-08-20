@@ -164,7 +164,7 @@ const AnnotationPage = (props) => {
                         <li>Rate each response on a scale of 1 to 5 based on the following criteria:
                             <br></br>
                             <ul>
-                                <li><b>Suitability</b>: How closely does the response cover the instructions from the query and the requirements specified in the follow-up QAs (if any)? <br />
+                                <li><b>Suitability</b>: How closely does the response follow the instructions from the query and the requirements specified in the follow-up QAs (if any)? <br />
                                 * Note that the response does not need to be correct or detailed simply to be suitable, it simply needs to follow the instructions in the query and follow-up questions.</li>
                                 <li><b>Helpfulness</b>: How useful do you think the user would find this response, given the query and preferences they specified in the follow-up QAs (if any)?</li>
                                 <li><b>Specificity</b>: What is the level of detail of information in the response?</li>
