@@ -284,7 +284,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
             <Container fluid style={{ marginTop: '20px', width: "70%" }}>
                 <Form.Group controlId="justification">
-                    <Form.Label style={{ textAlign: 'left', fontSize: '20px' }}>Justification: Please provide a brief (2-3 sentences) reason for your judgement of the responses.</Form.Label>
+                    <Form.Label style={{ textAlign: 'left', fontSize: '20px' }}>Justification: Please provide a brief (2-3 sentences) reason for your judgement of the responses. <b>Note that this is important as we will be unable to interpret your judgements without these justifications.</b></Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}
