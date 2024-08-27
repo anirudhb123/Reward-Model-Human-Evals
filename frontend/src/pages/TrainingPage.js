@@ -286,10 +286,10 @@ const TrainingPage = () => {
         In this task, we ask you to evaluate AI model responses to queries that may be ambiguous or subjective in nature. 
         Imagine that these queries were posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to assess how well the AI model's responses address these queries.<br /><br />
         Since the queries can be ambiguous or subjective, we asked follow-up questions to the person X about their query. These questions can be about the person's intent, background or preferences. Your evaluation should consider these follow-up questions and the person X's answers to them. For instance, a query might be <i>"What is the best way to cook pasta?"</i>, where the follow-up question might be <i>"Q: Would you like a step-by-step recipe or a general overview?"</i> and the person's answer might be <i>"A: Step-by-step recipe"</i>. In this case, a step-by-step recipe would be preferred in the response.<br /><br />
-        Each annotation task includes 2 examples:
+        Each annotation task includes 3 examples of the following two types:
         <ol>
-            <li> <b>Example 1</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
-            <li> <b>Example 2</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses will incorporate the person's answers to the follow-up questions.</li>
+            <li> <b>Type I</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
+            <li> <b>Type II</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses try to incorporate the person's answers to the follow-up questions.</li>
         </ol>
         <b>Steps in the Annotation Task:</b><br></br><br></br>
         <ol>

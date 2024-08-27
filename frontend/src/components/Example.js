@@ -119,8 +119,8 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
     const properties = [
         { title: "Suitability", key1: "suitability_1", key2: "suitability_2", description: "How suitable is the response in directly addressing the query and the requirements specified in the follow-up QAs (if any)?" },
-        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response, given the preferences they specified in the follow-up QAs?" },
-        { title: "Specificity", key1: "specificity_1", key2: "specificity_2", description: "How detailed and thorough is the response?" },
+        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response, given the preferences they specified in the query and follow-up QAs?" },
+        { title: "Specificity", key1: "specificity_1", key2: "specificity_2", description: "What is the level of detail of information in the response?" },
         { title: "Correctness", key1: "correctness_1", key2: "correctness_2", description: "How accurate is the information provided in the response?" },
         { title: "Coherence", key1: "coherence_1", key2: "coherence_2", description: "How logically structured and easy to follow is the response?" },
     ];
@@ -142,7 +142,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                         <Card.Body>
                         <Card.Title> {"Follow-Up Questions and Answers:"} </Card.Title>
                         <Card.Title>
-                            {"Shown below are follow-up questions and the person X's answers to these questions."}
+                            {"This example contains follow-up questions about the query and the person X's answers to these questions."}
                             <br />
                             {"Do the responses incorporate the answer to each follow-up question?"}
                         </Card.Title>

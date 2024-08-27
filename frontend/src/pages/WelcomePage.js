@@ -36,13 +36,13 @@ const WelcomePage = () => {
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
             let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
-            const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
-            exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
+            // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
+            // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
 
-            // Ensure "Responses to Follow-Up Questions" item comes second if it exists
-            if (followUpItem) {
-              exampleList.splice(1, 0, followUpItem);
-            }
+            // // Ensure "Responses to Follow-Up Questions" item comes second if it exists
+            // if (followUpItem) {
+            //   exampleList.splice(1, 0, followUpItem);
+            // }
             
             setIsSubmitting(false);  // Re-enable the button
             // Navigate to training page if it's the first task
