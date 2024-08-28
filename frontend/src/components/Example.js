@@ -214,16 +214,17 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
             )}
 
             {!follow_up_qas.length && (
-                    <><Card style={{ width: "100%", backgroundColor: '#AED5B3' }} className="query-card">
-                    <Card.Body>
-                        <Card.Title> {"Follow-Up Questions and Answers:"} </Card.Title>
-                        <Card.Title>
-                            {"This is a Type I example as it does not contain follow-up questions."}
-                            <br />
-                            {"You simply need to rate the responses."}
-                        </Card.Title>
-                    </Card.Body>
-                </Card><br /></>
+                <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
+                    <Card style={{ width: "100%", backgroundColor: '#AED5B3' }} className="query-card">
+                        <Card.Body>
+                            <Card.Title>
+                                {"This is a Type I example so it does not contain follow-up questions."}
+                                <br />
+                                {"You simply need to rate the responses."}
+                            </Card.Title>
+                        </Card.Body>
+                    </Card><br />
+                </Container>
             )}
 
             <Container fluid style={{ marginTop: '20px', width: "70%" }} className="responses-container">
