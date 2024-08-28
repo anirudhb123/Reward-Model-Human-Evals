@@ -12,6 +12,19 @@ const WelcomePage = () => {
   // const baseUrl = `/api/examples/${annotatorId}`;
   const baseUrl = `/api/examples`;
 
+  function shuffle(array) {
+    let currentIndex = array.length;
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+      // Pick a remaining element...
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  }
+
   const onClick = (e) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -36,6 +49,7 @@ const WelcomePage = () => {
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
             let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
+            exampleList = shuffle(exampleList);
             // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
             // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
 
