@@ -142,7 +142,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                         <Card.Body>
                         <Card.Title> {"Follow-Up Questions and Answers:"} </Card.Title>
                         <Card.Title>
-                            {"This example contains follow-up questions about the query and the person X's answers to these questions."}
+                            {"This is a Type II example as it contains follow-up questions about the query and the person X's answers to these questions."}
                             <br />
                             {"Do the responses incorporate the answer to each follow-up question?"}
                         </Card.Title>

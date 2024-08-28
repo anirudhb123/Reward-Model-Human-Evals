@@ -49,7 +49,7 @@ const WelcomePage = () => {
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
             let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
-            exampleList = shuffle(exampleList);
+            shuffle(exampleList);
             // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
             // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
 
