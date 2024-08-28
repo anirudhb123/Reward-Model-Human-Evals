@@ -63,7 +63,7 @@ const AnnotationPage = (props) => {
             ];
         }
         const missing = requiredFields.filter(field => exampleAnnotation[field] === "" || exampleAnnotation[field] === null);
-        if (currentExample > 0) {
+        if (data[currentExample].follow_up_qas && data[currentExample].follow_up_qas.length > 0) {
             // TODO: Add validation for follow-up QAs
             // Validation for follow-up QAs
             data[currentExample].follow_up_qas.forEach((qa, index) => {

@@ -136,7 +136,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 </Card.Body>
             </Card>
 
-            {currentExample > 0 && (
+            {follow_up_qas && follow_up_qas.length > 0 && (
                 <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
                     <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
                         <Card.Body>
