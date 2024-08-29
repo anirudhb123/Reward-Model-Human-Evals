@@ -87,7 +87,7 @@ const trainingData = {
           correctness_1: "Response 1 is accurate, with no errors.",
           suitability_2: "Response 2 is somewhat relevant but lacks detail and depth.",
           helpfulness_2: "Response 2 is less helpful because it provides only basic information.",
-          specificity_2: "Response 2 lacks depth, offering a very general overview.",
+          specificity_2: "Response 2 lacks details, offering a very general overview.",
           coherence_2: "Response 2 is coherent but lacks the detailed structure of Response 1.",
           correctness_2: "Response 2 is correct, but it is less precise than Response 1."
         },
@@ -112,12 +112,12 @@ const trainingData = {
         explanations: {
           suitability_1: "Response 1 is highly relevant and follows the query and follow-up questions closely, providing examples and details on cellular mechanisms.",
           helpfulness_1: "Response 1 is very helpful as it includes examples, explains antibiotic resistance, and provides a reference.",
-          depth_1: "Response 1 is detailed but could have included more depth or multiple references.",
+          specificity_1: "Response 1 is detailed but could have included more details or multiple references.",
           coherence_1: "Response 1 is coherent and logically structured, making it easy to follow.",
           correctness_1: "Response 1 is accurate and consistent.",
           suitability_2: "Response 2 is relevant, but it lacks some of the details requested in the follow-up questions.",
           helpfulness_2: "Response 2 is helpful but not as thorough as Response 1.",
-          depth_2: "Response 2 provides adequate detail but does not go as in-depth as Response 1.",
+          specificity_2: "Response 2 provides adequate detail but does not go as in-depth as Response 1.",
           coherence_2: "Response 2 is generally coherent but has minor issues with flow.",
           correctness_2: "Response 2 is accurate and consistent."
         },
@@ -164,7 +164,21 @@ const TrainingPage = () => {
   const mode = location.state.data[0].mode; // Assuming the mode is passed via location state
   const annotatorId = location.state.annotatorId;
   const [currentExample, setCurrentExample] = useState(0);
-  const [exampleAnnotation, setExampleAnnotation] = useState({});
+  const emptyExample = {
+    suitability_1: null,
+    helpfulness_1: null,
+    specificity_1: null,
+    correctness_1: null,
+    coherence_1: null,
+    suitability_2: null,
+    helpfulness_2: null,
+    specificity_2: null,
+    correctness_2: null,
+    coherence_2: null,
+    overall_preference: "",
+    justification: "",
+  };
+  const [exampleAnnotation, setExampleAnnotation] = useState(emptyExample);
   const [feedback, setFeedback] = useState("");
   const [validationMessage, setValidationMessage] = useState("");
   const trainingExamples = trainingData[mode];
@@ -222,9 +236,8 @@ const TrainingPage = () => {
 
   const handleNextExample = () => {
     if (!validateAnnotations()) return;
-
     setFeedback("");
-    setExampleAnnotation({});
+    setExampleAnnotation(emptyExample);
     setCurrentExample(currentExample + 1);
   };
 
