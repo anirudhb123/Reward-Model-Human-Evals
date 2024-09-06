@@ -29,7 +29,7 @@ app.get('/examples', (request, response) => {
 // get all tasks from a specific annotator (given an id)
 app.get('/api/examples', (request, response) => {
    // Example.find({ annotator_id: request.params.annotator_id }).then(examples => {
-   Example.find({ completed: false }).then(examples => {
+   Example.find({  }).then(examples => {
        response.json(examples);
    }).catch(error => response.json(error));
 });
@@ -39,23 +39,10 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
    const body = request.body;
    Example.findByIdAndUpdate(request.params.example_id, {
        $set: {
-           'completed': body.completed,
-           'time_spent': body.time_spent,
-           'suitability_1': body.suitability_1,
-           'helpfulness_1': body.helpfulness_1,
-           'specificity_1': body.specificity_1,
-           'correctness_1': body.correctness_1,
-           'coherence_1': body.coherence_1,
-           'suitability_2': body.suitability_2,
-           'helpfulness_2': body.helpfulness_2,
-           'specificity_2': body.specificity_2,
-           'correctness_2': body.correctness_2,
-           'coherence_2': body.coherence_2,
-           'overall_preference': body.overall_preference,
-           'justification': body.justification,
-           'annotator_id': body.annotator_id,
-           'mode': body.mode,
-           'follow_up_qas': body.follow_up_qas
+           'query': body.query,
+           'response1': body.response1,
+           'response2': body.response2,
+           'reward_model_preferred_response': body.reward_model_preferred_response,
        },
    },
    { new: true }
