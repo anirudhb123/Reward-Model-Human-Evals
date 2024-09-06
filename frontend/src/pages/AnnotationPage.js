@@ -154,7 +154,7 @@ const AnnotationPage = (props) => {
                     <li> <b>Example 1</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
                     <li> <b>Example 2</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses will incorporate the person's answers to the follow-up questions.</li>
                 </ol> */}
-                Each annotation task includes 3 examples of the following two types:
+                Each annotation task includes an <b>example of either one of the following two types</b>:
                 <ol>
                     <li> <b>Type I</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
                     <li> <b>Type II</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses try to incorporate the person's answers to the follow-up questions.</li>
