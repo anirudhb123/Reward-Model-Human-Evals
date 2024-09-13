@@ -51,6 +51,67 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
    }).catch(error => response.json(error));
 });
 
+
+
+
+// Define a new schema for the AnnotatedExamples collection
+const annotatedExampleSchema = new mongoose.Schema({
+   query_id: String,
+   annotator_id: String,
+   completed: Boolean,
+   justification: String,
+   overall_preference: String,
+   time_spent: Number
+});
+
+// Create the model for the AnnotatedExamples collection
+const AnnotatedExample = mongoose.model('AnnotatedExample', annotatedExampleSchema);
+
+
+// annotate example
+/* app.patch('/api/annotate/example/:example_id', (request, response) => {
+   const body = request.body;
+   Example.findByIdAndUpdate(request.params.example_id, {
+       $set: {
+           'query': body.query,
+           'response1': body.response1,
+           'response2': body.response2,
+           'reward_model_preferred_response': body.reward_model_preferred_response,
+       },
+   },
+   { new: true }
+   ).then(example => {
+       response.json(example);
+   }).catch(error => response.json(error));
+}); */
+
+
+app.post('/api/annotate/example/:example_id', (request, response) => {
+   const body = request.body;
+
+   console.log(body.query_id)
+
+   // Create a new document using the AnnotatedExample model
+   const newAnnotatedExample = new AnnotatedExample({
+       query_id: body.query_id,
+       annotator_id: body.annotator_id,
+       completed: body.completed,
+       justification: body.justification,
+       overall_preference: body.overall_preference,
+       time_spent: body.time_spent
+   });
+
+   // Save the new document to the AnnotatedExamples collection
+   newAnnotatedExample.save()
+   .then(savedAnnotatedExample => {
+       response.json(savedAnnotatedExample);
+   })
+   .catch(error => {
+       response.status(400).json({ error: error.message });
+   });
+});
+
+
 app.listen(PORT, () => {
    console.log('Listening on port', PORT);
 });

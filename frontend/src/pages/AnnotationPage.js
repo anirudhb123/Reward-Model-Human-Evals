@@ -15,7 +15,7 @@ const AnnotationPage = (props) => {
     const [currentExample, setCurrentExample] = useState(0);
 
     const emptyExample = {
-        suitability_1: null,
+        /* suitability_1: null,
         helpfulness_1: null,
         specificity_1: null,
         correctness_1: null,
@@ -24,7 +24,7 @@ const AnnotationPage = (props) => {
         helpfulness_2: null,
         specificity_2: null,
         correctness_2: null,
-        coherence_2: null,
+        coherence_2: null, */
         overall_preference: "",
         justification: "",
     };
@@ -45,25 +45,10 @@ const AnnotationPage = (props) => {
 
     const validateAnnotations = () => {
         let requiredFields = [];
-        if (mode === 'pairwise') {
-            requiredFields = ["overall_preference", "justification"];
-        } else {
-            requiredFields = [
-                "suitability_1",
-                "helpfulness_1",
-                "specificity_1",
-                "correctness_1",
-                "coherence_1",
-                "suitability_2",
-                "helpfulness_2",
-                "specificity_2",
-                "correctness_2",
-                "coherence_2",
-                "justification"
-            ];
-        }
+        requiredFields = ["overall_preference", "justification"];
+       
         const missing = requiredFields.filter(field => exampleAnnotation[field] === "" || exampleAnnotation[field] === null);
-        if (data[currentExample].follow_up_qas && data[currentExample].follow_up_qas.length > 0) {
+        /* if (data[currentExample].follow_up_qas && data[currentExample].follow_up_qas.length > 0) {
             // TODO: Add validation for follow-up QAs
             // Validation for follow-up QAs
             data[currentExample].follow_up_qas.forEach((qa, index) => {
@@ -75,19 +60,25 @@ const AnnotationPage = (props) => {
             }
             });
         }
-
+ */
+        
+        console.log(missing)
         setMissingFields(missing);
         return missing.length === 0;
     };
 
     const handleButtonAction = () => {
         if (!validateAnnotations()) {
+            console.log(exampleAnnotation)
             return;
         }
+
+        console.log(exampleAnnotation)
 
         const endTime = new Date();
         const timeSpent = endTime - seconds;
         const updateData = {
+            query_id: data[currentExample]._id,
             completed: true,
             time_spent: timeSpent,
             ...exampleAnnotation,
@@ -96,9 +87,9 @@ const AnnotationPage = (props) => {
         };
 
         axios
-            .patch(`/api/annotate/example/${data[currentExample]._id}`, updateData)
+            .post(`/api/annotate/example/${data[currentExample]._id}`, updateData)
             .then((response) => {
-                console.log('Data saved:', response.data);
+                console.log('Data saved:', updateData);
             })
             .catch((error) => {
                 console.error('Error saving data:', error);
@@ -198,16 +189,17 @@ const AnnotationPage = (props) => {
                 <b>If you do not understand the query or if an error occurs in the interface, just go to the link again, enter your ID and you will be shown a different query.</b>
             </Alert>
             <Example
-                query={data[currentExample].query}
-                response1={data[currentExample].response1}
-                response2={data[currentExample].response2}
+                query={data[currentExample].question}
+                response1={data[currentExample]['response 1']}
+                response2={data[currentExample]['response 2']}
                 exampleAnnotation={exampleAnnotation}
                 setExampleAnnotation={setExampleAnnotation}
-                mode={mode}
-                follow_up_qas={data[currentExample].follow_up_qas}
-                currentExample={currentExample}
+                // mode={mode}
+                // currentExample={currentExample}
             />
-            {renderAlert()}
+            
+            
+            {/*renderAlert()*/}
             <div className="buttons">{renderButton()}</div>
         </div>
     );

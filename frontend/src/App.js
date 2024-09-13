@@ -3,7 +3,6 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 // pages & components  
 import AnnotationPage from './pages/AnnotationPage';
 import WelcomePage from './pages/WelcomePage';
-import TrainingPage from './pages/TrainingPage';
 import SubmissionPage from './pages/SubmissionPage';
 import Navbar from './components/Navbar'
 
@@ -24,7 +23,7 @@ function App() {
             />
             <Route
               path='/training'
-              element={<TrainingPage/>}
+              element={<AnnotationPage/>}
             />
             <Route
               path='/submission'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Row, Col, OverlayTrigger, Tooltip, Form, Table } from 'react-bootstrap';
+import { Card, Container, Row, Col, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import Slider from "./Slider";
 import OverallPreference from "./OverallPreference";
 import "./componentStyle.css";
@@ -15,28 +15,28 @@ function NewlineText({ text }) {
     return <>{newText}</>;
 }
 
-const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation, mode, follow_up_qas, currentExample }) => {
+const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnnotation }) => {
 
-    const descriptions = {
+/*     const descriptions = {
         suitability: [
-            "The response does not address the query or follow-up questions at all.",
-            "The response addresses the query or follow-up questions very minimally, missing the core aspects.",
-            "The response somewhat addresses the query or follow-up questions, covering some important points but lacking key details.",
-            "The response mostly addresses the query or follow-up questions, with minor omissions.",
-            "The response fully addresses the query or follow-up questions, covering all key aspects."
+            "The response does not address the query at all.",
+            "The response addresses the query very minimally, missing the core aspects.",
+            "The response somewhat addresses the query, covering some important points but lacking key details.",
+            "The response mostly addresses the query, with minor omissions.",
+            "The response fully addresses the query, covering all key aspects."
         ],
         helpfulness: [
-            "The response is not helpful in addressing the query or follow-up questions.",
+            "The response is not helpful in addressing the query.",
             "The response provides limited help, missing important context or useful information.",
             "The response is somewhat helpful, offering useful information but lacking specific details.",
-            "The response is helpful, covering most of the query or follow-up questions adequately.",
-            "The response is highly helpful, fully addressing the query or follow-up questions with thorough and useful information."
+            "The response is helpful, covering most of the query adequately.",
+            "The response is highly helpful, fully addressing the query with thorough and useful information."
         ],
         specificity: [
             "The response is very shallow, providing minimal information or detail.",
             "The response offers some detail but is largely superficial and lacks detail.",
             "The response provides an adequate level of detail, covering the main points with moderate detail.",
-            "The response is detailed, covering most aspects of the query or follow-up questions with significant detail.",
+            "The response is detailed, covering most aspects of the query with significant detail.",
             "The response is very specific, covering all aspects with great detail."
         ],
         correctness: [
@@ -54,32 +54,19 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
             "The response is completely coherent, with a clear, logical, and easy-to-follow structure."
         ],
     };
-
-    const queryEnd = query.indexOf('Follow-Up Questions and Answers:');
+ */
     let split_query;
-    if (queryEnd !== -1) {
-        split_query = query.slice(0, queryEnd).trim();
-    } else {
-        split_query = query.trim();
-    }
+    split_query = query
 
-    const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
-        if (mode === "absolute" && key in descriptions ) {
-            const baseKey = key.slice(0, -2);
-            const value = exampleAnnotation[key];
-            if (value !== null && value !== undefined) {  // Check for null or undefined
-                console.log(baseKey, value);
-                acc[key] = descriptions[baseKey][value - 1];
-            } else {
-                acc[key] = null;  // Set to null if the value is null or undefined
-            }
-        } else {
-            acc[key] = null;
-        }
+  /*   const initialActiveDescriptions = Object.keys(exampleAnnotation).reduce((acc, key) => {
+        acc[key] = null;
         return acc;
     }, {});
 
+
     const [activeDescriptions, setActiveDescriptions] = useState(initialActiveDescriptions);
+
+    */
 
     const renderTooltip = (props) => (
         <Tooltip {...props}>
@@ -87,39 +74,31 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
         </Tooltip>
     );
 
-    const handleSliderChange = (propertyKey, value) => {
-        setExampleAnnotation(prevState => ({
-            ...prevState,
-            [propertyKey]: value
-        }));
-        const baseKey = propertyKey.slice(0, -2);
-        setActiveDescriptions(prevState => ({
-            ...prevState,
-            [propertyKey]: descriptions[baseKey][value - 1]
-        }));
-    };
-
-    const handleRadioChange = (qaIndex, responseKey, value) => {
-        const updatedFollowUpQAs = [...follow_up_qas];
-        updatedFollowUpQAs[qaIndex][responseKey] = value;
-        console.log(updatedFollowUpQAs);
-        setExampleAnnotation(prevState => ({
-            ...prevState,
-            follow_up_qas: updatedFollowUpQAs
-        }));
-    };
+    // const handleSliderChange = (propertyKey, value) => {
+    //     setExampleAnnotation(prevState => ({
+    //         ...prevState,
+    //         [propertyKey]: value
+    //     }));
+    //     const baseKey = propertyKey.slice(0, -2);
+    //     setActiveDescriptions(prevState => ({
+    //         ...prevState,
+    //         [propertyKey]: descriptions[baseKey][value - 1]
+    //     }));
+    // };
 
     const handleJustificationChange = (event) => {
-        const value = event.target.value;
-        setExampleAnnotation(prevState => ({
-            ...prevState,
-            justification: value
-        }));
+       const value = event.target.value;
+       setExampleAnnotation(prevState => ({
+           ...prevState,
+           justification: value
+       }));
+
+       console.log(exampleAnnotation)
     };
 
     const properties = [
-        { title: "Suitability", key1: "suitability_1", key2: "suitability_2", description: "How suitable is the response in directly addressing the query and the requirements specified in the follow-up QAs (if any)?" },
-        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response, given the preferences they specified in the query and follow-up QAs?" },
+        { title: "Suitability", key1: "suitability_1", key2: "suitability_2", description: "How suitable is the response in directly addressing the query?" },
+        { title: "Helpfulness", key1: "helpfulness_1", key2: "helpfulness_2", description: "How useful do you think the user would find this response?" },
         { title: "Specificity", key1: "specificity_1", key2: "specificity_2", description: "What is the level of detail of information in the response?" },
         { title: "Correctness", key1: "correctness_1", key2: "correctness_2", description: "How accurate is the information provided in the response?" },
         { title: "Coherence", key1: "coherence_1", key2: "coherence_2", description: "How logically structured and easy to follow is the response?" },
@@ -127,105 +106,14 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
 
     return (
         <div>
-            <Card style={{ width: "70%", backgroundColor: '#AED5B3'}} className="query-card">
+            <Card style={{ width: "70%", backgroundColor: '#AED5B3' }} className="query-card">
                 <Card.Body>
                     <Card.Title> {"Query:"} </Card.Title>
                     <Card.Text>
-                        {<NewlineText text={split_query} />}
+                    {<NewlineText text={split_query} />}
                     </Card.Text>
                 </Card.Body>
             </Card>
-
-            {follow_up_qas && follow_up_qas.length > 0 && (
-                <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    <Card style={{ width: "100%", backgroundColor: '#AED5B3'}} className="query-card">
-                        <Card.Body>
-                        <Card.Title> {"Follow-Up Questions and Answers:"} </Card.Title>
-                        <Card.Title>
-                            {"This is a Type II example as it contains follow-up questions about the query and the person X's answers to these questions."}
-                            <br />
-                            {"Do the responses incorporate the answer to each follow-up question?"}
-                        </Card.Title>
-                        </Card.Body>
-                    </Card><br />
-                    <Table bordered hover>
-                        <tbody>
-                            {follow_up_qas.map((qaPair, index) => (
-                                <React.Fragment key={index}>
-                                    <tr>
-                                        <td colSpan={3} style={{ backgroundColor: '#f8f9fa', textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
-                                            <h6 style={{ margin: '10px 0' }}>{qaPair.qa}</h6>
-                                        </td>
-                                    </tr>
-                                    {/* Response Options aligned under each response */}
-                                    <tr>
-                                        <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
-                                        <p style={{display:'inline'}}>Response 1:  </p>
-                                            <Form.Check
-                                                type="radio"
-                                                label="Yes"
-                                                name={`satisfied_1_${index}`}
-                                                id={`satisfied_1_${index}`}
-                                                value={true}
-                                                // checked={qaPair.satisfied_1 === true}
-                                                onChange={() => handleRadioChange(index, 'satisfied_1', true)}
-                                                inline
-                                            />
-                                            <Form.Check
-                                                type="radio"
-                                                label="No"
-                                                name={`satisfied_1_${index}`}
-                                                id={`not_satisfied_1_${index}`}
-                                                value={false}
-                                                // checked={qaPair.satisfied_1 === false}
-                                                onChange={() => handleRadioChange(index, 'satisfied_1', false)}
-                                                inline
-                                            />
-                                        </td>
-                                        <td style={{ textAlign: 'center', verticalAlign: 'middle', border: '2px solid #dee2e6' }}>
-                                        <p style={{display:'inline'}}>Response 2:  </p>
-                                            <Form.Check
-                                                type="radio"
-                                                label="Yes"
-                                                name={`satisfied_2_${index}`}
-                                                id={`satisfied_2_${index}`}
-                                                value={true}
-                                                // checked={qaPair.satisfied_2 === true}
-                                                onChange={() => handleRadioChange(index, 'satisfied_2', true)}
-                                                inline
-                                            />
-                                            <Form.Check
-                                                type="radio"
-                                                label="No"
-                                                name={`satisfied_2_${index}`}
-                                                id={`not_satisfied_2_${index}`}
-                                                value={false}
-                                                // checked={qaPair.satisfied_2 === false}
-                                                onChange={() => handleRadioChange(index, 'satisfied_2', false)}
-                                                inline
-                                            />
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Container>
-            )}
-
-            {!follow_up_qas.length && (
-                <Container fluid style={{ marginTop: '20px', width: "70%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    <Card style={{ width: "100%", backgroundColor: '#AED5B3' }} className="query-card">
-                        <Card.Body>
-                            <Card.Title>
-                                {"This is a Type I example so it does not contain follow-up questions."}
-                                <br />
-                                {"You simply need to rate the responses."}
-                            </Card.Title>
-                        </Card.Body>
-                    </Card><br />
-                </Container>
-            )}
 
             <Container fluid style={{ marginTop: '20px', width: "70%" }} className="responses-container">
                 <Row>
@@ -244,7 +132,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                             <Card.Body>
                                 <Card.Title> {"Response 2:"} </Card.Title>
                                 <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={response2} />}
+                                {<NewlineText text={response2} />}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -252,49 +140,14 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                 </Row>
             </Container>
 
-            {mode === 'absolute' && (
-                <Container fluid style={{ marginTop: '20px', width: "85%", marginLeft: 'auto', marginRight: 'auto' }}>
-                    <Card style={{ width: "80%", backgroundColor: '#AED5B3'}} className="query-card">
-                        <Card.Body>
-                            <Card.Title> {"Now rate the above two responses on the following criteria."} </Card.Title>
-                        </Card.Body>
-                    </Card><br />
-                    {properties.map((property) => (
-                        <Row key={property.title} style={{ alignItems: 'center', marginBottom: '20px' }}>
-                            <OverlayTrigger overlay={renderTooltip(property.description)}>
-                                <Col xs={1}><h5>{property.title}</h5></Col>
-                            </OverlayTrigger>
-                            <Col xs={5}>
-                                <Slider
-                                    state={exampleAnnotation}
-                                    setState={setExampleAnnotation}
-                                    toChange={property.key1}
-                                    onChange={(value) => handleSliderChange(property.key1, value)}
-                                />
-                                <p>{activeDescriptions[property.key1]}</p>
-                            </Col>
-                            <Col xs={5}>
-                                <Slider
-                                    state={exampleAnnotation}
-                                    setState={setExampleAnnotation}
-                                    toChange={property.key2}
-                                    onChange={(value) => handleSliderChange(property.key2, value)}
-                                />
-                                <p>{activeDescriptions[property.key2]}</p>
-                            </Col>
-                        </Row>
-                    ))}
-                </Container>
-            )}
-
-            {mode === 'pairwise' && (
+{             (
                 <OverallPreference
-                    title="Overall Preference"
-                    state={exampleAnnotation}
-                    setState={setExampleAnnotation}
-                    toChange="overall_preference"
+                title="Overall Preference"
+                state={exampleAnnotation} 
+                setState={setExampleAnnotation}  // This should be the state setter function
+                toChange="overall_preference"    // This should match the key in the state object
                 />
-            )}
+            ) }
 
             <Container fluid style={{ marginTop: '20px', width: "70%" }}>
                 <Form.Group controlId="justification">
@@ -312,21 +165,11 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
     );
 };
 
-
 Example.propTypes = {
     query: PropTypes.string.isRequired,
     response1: PropTypes.string.isRequired,
     response2: PropTypes.string.isRequired,
-    exampleAnnotation: PropTypes.object.isRequired,
-    setExampleAnnotation: PropTypes.func.isRequired,
-    mode: PropTypes.string.isRequired,  // Add mode prop
-    follow_up_qas: PropTypes.arrayOf(
-        PropTypes.shape({
-            qa: PropTypes.string.isRequired,
-            satisfied_1: PropTypes.bool,
-            satisfied_2: PropTypes.bool,
-        })
-    ).isRequired
+    reward_model_preferred_response: PropTypes.string.isRequired
 };
 
 export default Example;

@@ -7,7 +7,7 @@ import axios from "axios";
 const WelcomePage = () => {
   const navigate = useNavigate();
   const [annotatorId, setAnnotatorId] = useState("");
-  const [alert, setAlert] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   // const baseUrl = `/api/examples/${annotatorId}`;
   const baseUrl = `/api/examples`;
@@ -34,12 +34,17 @@ const WelcomePage = () => {
       .then((response) => {
         console.log(response.data);
         if (response.data.length === 0) {
-          setAlert(true);
+          setAlertVisible(true);
           setIsSubmitting(false);  // Re-enable the button
         } else {
-          const todoExamples = response.data.filter(
-            (example) => !example.completed
-          );
+          //const todoExamples = response.data.filter(
+          //  (example) => !example.completed
+          // );
+          
+          const todoExamples = response.data
+
+          console.log(todoExamples)
+
           if (todoExamples.length === 0) {
             navigate("/submission");
           } else {
@@ -48,7 +53,8 @@ const WelcomePage = () => {
             // Sample random example ID from the above list
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
-            let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
+            // let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
+            let exampleList = todoExamples
             // shuffle(exampleList);
             // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
             // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
@@ -65,13 +71,12 @@ const WelcomePage = () => {
       })
       .catch((error) => {
         console.error("Failed to fetch examples:", error);
-        alert("An error occurred while fetching examples. Please try again.");
         setIsSubmitting(false);  // Re-enable the button
       });
   };
 
   const renderAlert = () => {
-    if (alert) {
+    if (alertVisible) {
       return (
         <Alert
           variant="danger"
