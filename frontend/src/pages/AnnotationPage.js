@@ -4,6 +4,7 @@ import Example from "../components/Example";
 import { Button, Alert, ProgressBar } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import MultiSelectCheckbox from '../components/MultiSelectCheckbox';
 
 const AnnotationPage = (props) => {
     const navigate = useNavigate();
@@ -31,6 +32,7 @@ const AnnotationPage = (props) => {
 
     const [exampleAnnotation, setExampleAnnotation] = useState(emptyExample);
     const [missingFields, setMissingFields] = useState([]);
+    const [selectedValues, setSelectedValues] = useState([]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -43,9 +45,13 @@ const AnnotationPage = (props) => {
         setExampleAnnotation(emptyExample);
     }, [currentExample]);
 
+    useEffect(() => {
+        setSelectedValues([]);
+    }, [currentExample]);
+
     const validateAnnotations = () => {
         let requiredFields = [];
-        requiredFields = ["overall_preference", "justification"];
+        requiredFields = ["overall_preference"];
        
         const missing = requiredFields.filter(field => exampleAnnotation[field] === "" || exampleAnnotation[field] === null);
         /* if (data[currentExample].follow_up_qas && data[currentExample].follow_up_qas.length > 0) {
@@ -62,9 +68,8 @@ const AnnotationPage = (props) => {
         }
  */
         
-        console.log(missing)
         setMissingFields(missing);
-        return missing.length === 0;
+        return missing.length === 0 && selectedValues.length !== 0;
     };
 
     const handleButtonAction = () => {
@@ -73,13 +78,12 @@ const AnnotationPage = (props) => {
             return;
         }
 
-        console.log(exampleAnnotation)
-
         const endTime = new Date();
         const timeSpent = endTime - seconds;
         const updateData = {
             query_id: data[currentExample]._id,
             completed: true,
+            selectedValues: selectedValues,
             time_spent: timeSpent,
             ...exampleAnnotation,
             annotator_id: annotatorId,
@@ -128,6 +132,12 @@ const AnnotationPage = (props) => {
         );
     };
 
+    const handleSelectionChange = (selectedValues) => {
+        console.log('Selected values:', selectedValues);
+        setSelectedValues(selectedValues); 
+    };
+    
+
     return (
         <div align="center">
             <Alert style={{ width: "70%", marginTop: "20px", textAlign: "left", fontSize: 18, backgroundColor: 'white' }}>
@@ -139,37 +149,13 @@ const AnnotationPage = (props) => {
                 <b>Task Overview:</b><br></br><br></br>
                 In this task, we ask you to evaluate AI model responses to queries that may be ambiguous or subjective in nature. 
                 Imagine that these queries were posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to assess how well the AI model's responses address these queries.<br /><br />
-                Since the queries can be ambiguous or subjective, we asked follow-up questions to the person X about their query. These questions can be about the person's intent, background or preferences. Your evaluation should consider these follow-up questions and the person X's answers to them. For instance, a query might be <i>"What is the best way to cook pasta?"</i>, where the follow-up question might be <i>"Q: Would you like a step-by-step recipe or a general overview?"</i> and the person's answer might be <i>"A: Step-by-step recipe"</i>. In this case, a step-by-step recipe would be preferred in the response.<br /><br />
                 {/* Each annotation task includes 2 examples:
                 <ol>
                     <li> <b>Example 1</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
                     <li> <b>Example 2</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses will incorporate the person's answers to the follow-up questions.</li>
                 </ol> */}
-                For each annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate.
-                <b>Steps in the Annotation Task:</b><br></br><br></br>
-                <ol>
-                    <li>Read the query, follow-up questions & answers (if provided) and the two responses carefully.</li><br></br>
-                    {mode === 'absolute' && (
-                        <>
-                        <li>Rate each response on a scale of 1 to 5 based on the following criteria:
-                            <br></br>
-                            <ul>
-                                <li><b>Suitability</b>: How closely does the response follow the instructions from the query and the requirements specified in the follow-up QAs (if any)? <br />
-                                * Note that the response does not need to be correct or detailed simply to be suitable, it simply needs to follow the instructions in the query and follow-up questions.</li>
-                                <li><b>Helpfulness</b>: How useful do you think the user would find this response, given the query and preferences they specified in the follow-up QAs (if any)?</li>
-                                <li><b>Specificity</b>: What is the level of detail of information in the response?</li>
-                                <li><b>Correctness</b>: How accurate is the information provided in the response?</li>
-                                <li><b>Coherence</b>: How logically structured and easy to follow is the response?</li>
-                            </ul>
-                        </li>
-                        </>
-                    )}
-                    {mode === 'pairwise' && (
-                        <>
-                        <li>Finally, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie".</li>
-                        </>
-                    )}
-                </ol>
+                For each annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. Then, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie". We also ask that you select some reasons from the ones listed below as to why you preferred one response to the other (if you selected "Tie", please check only the "Responses Were of Equal Quality
+" box instead).                  
                 <br />
                 Your thoughtful evaluations will help us better understand and improve the performance of AI models. Thank you for your participation!
                 <br></br><br></br>
@@ -190,6 +176,13 @@ const AnnotationPage = (props) => {
                 setExampleAnnotation={setExampleAnnotation}
                 // mode={mode}
                 // currentExample={currentExample}
+            />
+
+            <MultiSelectCheckbox
+            key={currentExample} 
+            options={['Responses Were of Equal Quality', 'More Relevant', 'Easier to Understand', 'More Concise', 'Better Structure']}
+            title="Reasons Chosen Response was Preferred"
+            onSelectionChange={handleSelectionChange}
             />
             
             

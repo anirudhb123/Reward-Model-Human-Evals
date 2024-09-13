@@ -59,8 +59,8 @@ const annotatedExampleSchema = new mongoose.Schema({
    query_id: String,
    annotator_id: String,
    completed: Boolean,
-   justification: String,
    overall_preference: String,
+   preference_reasons: [String],
    time_spent: Number
 });
 
@@ -96,8 +96,8 @@ app.post('/api/annotate/example/:example_id', (request, response) => {
        query_id: body.query_id,
        annotator_id: body.annotator_id,
        completed: body.completed,
-       justification: body.justification,
        overall_preference: body.overall_preference,
+       preference_reasons: body.selectedValues,
        time_spent: body.time_spent
    });
 
