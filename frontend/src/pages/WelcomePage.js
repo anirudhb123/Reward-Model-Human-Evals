@@ -55,7 +55,7 @@ const WelcomePage = () => {
             // Get examples with the above ID and store in exampleList
             // let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
             let exampleList = todoExamples
-            // shuffle(exampleList);
+            shuffle(exampleList);
             // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
             // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
 
@@ -101,8 +101,7 @@ const WelcomePage = () => {
             <p>
               {" "}
               <br></br>
-              We are a group of researchers at the Allen Institute for Artificial Intelligence (Ai2) researching better evaluation practices for
-              language model generations. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
+              We are a group of researchers at the University of Pennsylvania researching biases in reward models used in training LLM's. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
             </p>
             Please enter your Prolific ID below to begin:
             <Form
