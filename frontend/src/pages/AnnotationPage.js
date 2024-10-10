@@ -32,7 +32,7 @@ const AnnotationPage = (props) => {
 
     const [exampleAnnotation, setExampleAnnotation] = useState(emptyExample);
     const [missingFields, setMissingFields] = useState([]);
-    const [selectedValues, setSelectedValues] = useState([]);
+    const [selectedValues, setSelectedValues] = useState('');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -132,9 +132,10 @@ const AnnotationPage = (props) => {
         );
     };
 
-    const handleSelectionChange = (selectedValues) => {
-        console.log('Selected values:', selectedValues);
-        setSelectedValues(selectedValues); 
+    const handleSelectionChange = (event) => {
+        const inputValue = event.target.value;
+        console.log('Input value:', inputValue);
+        setSelectedValues(inputValue); // Update the state with the new text value
     };
     
 
@@ -148,15 +149,13 @@ const AnnotationPage = (props) => {
                 <br></br>
                 <b>Task Overview:</b><br></br><br></br>
                 In this task, we ask you to evaluate AI model responses to queries that may be ambiguous or subjective in nature. 
-                Imagine that these queries were posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to assess how well the AI model's responses address these queries.<br /><br />
+                Imagine that these queries were posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to evaluate how well each response addresses the queries and decide which one is better.<br /><br />
                 {/* Each annotation task includes 2 examples:
                 <ol>
                     <li> <b>Example 1</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
                     <li> <b>Example 2</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses will incorporate the person's answers to the follow-up questions.</li>
                 </ol> */}
-                For each annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. Then, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie". We also ask that you select some reasons from the ones listed below as to why you preferred one response to the other (if you selected "Tie", please check only the "Responses Were of Equal Quality
-" box instead).                  
-                <br />
+                For each annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. Then, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie". We also ask that you provide some reasons as to why you preferred one response to the other (if you selected "Tie", you can provide reasons for why you thought the responses were of equal quality).
                 Your thoughtful evaluations will help us better understand and improve the performance of AI models. Thank you for your participation!
                 <br></br><br></br>
                 Current Example: {currentExample + 1} out of {data.length}
@@ -186,10 +185,20 @@ const AnnotationPage = (props) => {
             /> */}
 
             <textarea
-            key={currentExample}
-            placeholder="Enter your reasons for preferring the chosen response..."
-            title="Reasons Chosen Response was Preferred"
-            onChange={handleSelectionChange}
+                key={currentExample}
+                placeholder="Enter your reasons for preferring your chosen response."
+                title="Reasons Chosen Response was Preferred"
+                onChange={handleSelectionChange}
+                value={selectedValues}
+                style={{
+                    width: '70%', // Make it full width or adjust to your preference
+                    height: '100px', // Adjust the height as needed
+                    marginTop: '10px', // Add some space between the radio buttons and textarea
+                    padding: '10px', // Add padding for better readability
+                    fontSize: '14px', // Adjust the font size for better readability
+                    borderRadius: '4px', // Add rounded corners if desired
+                    border: '1px solid #ccc', // Add a border for a nicer look
+                }}
             />
             
             
