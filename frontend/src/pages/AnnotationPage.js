@@ -178,11 +178,18 @@ const AnnotationPage = (props) => {
                 // currentExample={currentExample}
             />
 
-            <MultiSelectCheckbox
+            {/* <MultiSelectCheckbox
             key={currentExample} 
             options={['Responses Were of Equal Quality', 'More Relevant', 'Easier to Understand', 'More Concise', 'Better Structure']}
             title="Reasons Chosen Response was Preferred"
             onSelectionChange={handleSelectionChange}
+            /> */}
+
+            <TextArea
+            key={currentExample}
+            placeholder="Enter your reasons for preferring the chosen response."
+            title="Reasons Chosen Response was Preferred"
+            onChange={handleSelectionChange}
             />
             
             
