@@ -185,9 +185,9 @@ const AnnotationPage = (props) => {
             onSelectionChange={handleSelectionChange}
             /> */}
 
-            <TextArea
+            <textarea
             key={currentExample}
-            placeholder="Enter your reasons for preferring the chosen response."
+            placeholder="Enter your reasons for preferring the chosen response..."
             title="Reasons Chosen Response was Preferred"
             onChange={handleSelectionChange}
             />
