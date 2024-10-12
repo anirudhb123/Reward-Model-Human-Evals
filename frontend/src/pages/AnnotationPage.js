@@ -91,6 +91,15 @@ const AnnotationPage = (props) => {
         };
 
         axios
+            .patch(`/api/annotate2/example/${data[currentExample]._id}`, updateData)
+            .then((response) => {
+                console.log('Data updated:', updateData);
+            })
+            .catch((error) => {
+                console.error('Error saving data:', error);
+            });
+
+        axios
             .post(`/api/annotate/example/${data[currentExample]._id}`, updateData)
             .then((response) => {
                 console.log('Data saved:', updateData);
@@ -169,8 +178,8 @@ const AnnotationPage = (props) => {
             </Alert>
             <Example
                 query={data[currentExample].question}
-                response1={data[currentExample]['response 1']}
-                response2={data[currentExample]['response 2']}
+                response1={data[currentExample].response_1}
+                response2={data[currentExample].response_2}
                 exampleAnnotation={exampleAnnotation}
                 setExampleAnnotation={setExampleAnnotation}
                 // mode={mode}

@@ -6,6 +6,7 @@ import OverallPreference from "./OverallPreference";
 import "./componentStyle.css";
 
 function NewlineText({ text }) {
+    console.log(text)
     const newText = text.split('\n').map((str, index, array) =>
         index === array.length - 1 ? str : <>
             {str}
@@ -169,7 +170,9 @@ Example.propTypes = {
     query: PropTypes.string.isRequired,
     response1: PropTypes.string.isRequired,
     response2: PropTypes.string.isRequired,
-    reward_model_preferred_response: PropTypes.string.isRequired
+    reward_model_preferred_response: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+    locked: PropTypes.bool.isRequired,
 };
 
 export default Example;

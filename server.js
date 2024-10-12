@@ -36,6 +36,8 @@ app.get('/api/examples', (request, response) => {
 
 // annotate example
 app.patch('/api/annotate/example/:example_id', (request, response) => {
+    console.log(request.body)
+    console.log(request.body.complete)
    const body = request.body;
    Example.findByIdAndUpdate(request.params.example_id, {
        $set: {
@@ -43,6 +45,8 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
            'response1': body.response1,
            'response2': body.response2,
            'reward_model_preferred_response': body.reward_model_preferred_response,
+           'locked': true,
+           'complete': body.complete
        },
    },
    { new: true }
@@ -50,6 +54,25 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
        response.json(example);
    }).catch(error => response.json(error));
 });
+
+// annotate example
+app.patch('/api/annotate2/example/:example_id', (request, response) => {
+    const body = request.body;
+    Example.findByIdAndUpdate(request.params.example_id, {
+        $set: {
+            'query': body.query,
+            'response1': body.response1,
+            'response2': body.response2,
+            'reward_model_preferred_response': body.reward_model_preferred_response,
+            'completed': true
+        },
+    },
+    { new: true }
+    ).then(example => {
+        response.json(example);
+    }).catch(error => response.json(error));
+ });
+ 
 
 
 
@@ -89,13 +112,12 @@ const AnnotatedExample = mongoose.model('AnnotatedExample', annotatedExampleSche
 app.post('/api/annotate/example/:example_id', (request, response) => {
    const body = request.body;
 
-   console.log(body.query_id)
+   console.log(body)
 
    // Create a new document using the AnnotatedExample model
    const newAnnotatedExample = new AnnotatedExample({
        query_id: body.query_id,
        annotator_id: body.annotator_id,
-       completed: body.completed,
        overall_preference: body.overall_preference,
        preference_reasons: body.selectedValues,
        time_spent: body.time_spent

@@ -27,23 +27,30 @@ const WelcomePage = () => {
 
   const onClick = (e) => {
     e.preventDefault();
+
+
+    if (annotatorId === "") {
+      alert("Please enter a Prolific ID.");
+      return;
+    }
+
     if (isSubmitting) return;
     setIsSubmitting(true);  // Set submitting state to true to prevent multiple clicks
+
     axios
       .get(baseUrl)
       .then((response) => {
-        console.log(response.data);
         if (response.data.length === 0) {
           setAlertVisible(true);
           setIsSubmitting(false);  // Re-enable the button
         } else {
-          //const todoExamples = response.data.filter(
-          //  (example) => !example.completed
-          // );
           
-          const todoExamples = response.data
-
-          console.log(todoExamples)
+          const expirationTime = 20 * 60 * 1000; // 20 minutes in milliseconds
+          const now = new Date();
+          
+          const todoExamples = response.data.filter(
+            (example) => (example.locked == "false" && example.completed == "false") ||  ((example.timestamp && ((now - new Date(example.timestamp) > expirationTime))))
+          )
 
           if (todoExamples.length === 0) {
             navigate("/submission");
@@ -54,18 +61,23 @@ const WelcomePage = () => {
             const randomExampleId = exampleIds[Math.floor(Math.random() * exampleIds.length)];
             // Get examples with the above ID and store in exampleList
             // let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
-            let exampleList = todoExamples
-            shuffle(exampleList);
-            // const followUpItem = exampleList.find(example => example.query.includes("Follow-Up Questions"));
-            // exampleList = exampleList.filter(example => !example.query.includes("Follow-Up Questions"));
-
-            // // Ensure "Responses to Follow-Up Questions" item comes second if it exists
-            // if (followUpItem) {
-            //   exampleList.splice(1, 0, followUpItem);
-            // }
             
-            setIsSubmitting(false);  // Re-enable the button
-            navigate("/examples", { state: { data: exampleList, annotatorId: annotatorId } });
+            const element = todoExamples[Math.floor(Math.random() * todoExamples.length)];
+            let timestamp = new Date().toISOString();
+
+            axios
+            .patch(`/api/annotate/example/${element._id}`, { locked: true, timestamp: timestamp })
+            .then(() => {
+              // navigate("/training", { state: { data: exampleList, annotatorId: annotatorId } });
+              navigate("/examples", { state: { data: [element], annotatorId: annotatorId } });
+            })
+            .catch((error) => {
+              console.error("Failed to lock the example:", error);
+              alert("An error occurred while selecting the example. Please try again.");
+            })
+            .finally(() => {
+              setIsSubmitting(false);  // Re-enable the button
+            });
           }
         }
       })
