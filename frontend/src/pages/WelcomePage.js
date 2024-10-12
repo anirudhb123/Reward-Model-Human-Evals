@@ -49,7 +49,7 @@ const WelcomePage = () => {
           const now = new Date();
           
           const todoExamples = response.data.filter(
-            (example) => (example.locked == "false" && example.completed == "false") ||  ((example.timestamp && ((now - new Date(example.timestamp) > expirationTime))))
+            (example) => (example.locked != "false" && example.completed != "false") ||  ((!example.completed && example.timestamp && ((now - new Date(example.timestamp) > expirationTime))))
           )
 
           if (todoExamples.length === 0) {
