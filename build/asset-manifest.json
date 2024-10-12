@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.57f60dbb.css",
-    "main.js": "/static/js/main.db86e22c.js",
+    "main.js": "/static/js/main.b302c413.js",
     "static/media/penn_logo.png": "/static/media/penn_logo.395a58744c04eb03be6c.png",
     "index.html": "/index.html",
     "main.57f60dbb.css.map": "/static/css/main.57f60dbb.css.map",
-    "main.db86e22c.js.map": "/static/js/main.db86e22c.js.map"
+    "main.b302c413.js.map": "/static/js/main.b302c413.js.map"
   },
   "entrypoints": [
     "static/css/main.57f60dbb.css",
-    "static/js/main.db86e22c.js"
+    "static/js/main.b302c413.js"
   ]
 }

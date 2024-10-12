@@ -173,6 +173,7 @@ Example.propTypes = {
     reward_model_preferred_response: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
     locked: PropTypes.bool.isRequired,
+    current_date: PropTypes.string.isRequired
 };
 
 export default Example;

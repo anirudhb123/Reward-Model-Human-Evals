@@ -47,10 +47,14 @@ const WelcomePage = () => {
           
           const expirationTime = 20 * 60 * 1000; // 20 minutes in milliseconds
           const now = new Date();
+
+          console.log(response.data[0].current_date)
           
           const todoExamples = response.data.filter(
-            (example) => (example.locked != "false" && example.completed != "false") ||  ((!example.completed && example.timestamp && ((now - new Date(example.timestamp) > expirationTime))))
+            (example) => (example.locked == "false" && example.completed == "false") ||  ((example.completed == "false" && example.current_date && ((now - new Date(example.current_date) > expirationTime))))
           )
+
+          console.log("todoExamples", todoExamples);
 
           if (todoExamples.length === 0) {
             navigate("/submission");
@@ -63,10 +67,12 @@ const WelcomePage = () => {
             // let exampleList = todoExamples.filter((example) => example.example_id === randomExampleId);
             
             const element = todoExamples[Math.floor(Math.random() * todoExamples.length)];
-            let timestamp = new Date().toISOString();
+            let current_date = new Date().toISOString();
+
+            console.log(current_date)
 
             axios
-            .patch(`/api/annotate/example/${element._id}`, { locked: true, timestamp: timestamp })
+            .patch(`/api/annotate/example/${element._id}`, { locked: true, current_date: current_date })
             .then(() => {
               // navigate("/training", { state: { data: exampleList, annotatorId: annotatorId } });
               navigate("/examples", { state: { data: [element], annotatorId: annotatorId } });

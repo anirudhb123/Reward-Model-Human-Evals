@@ -7,6 +7,7 @@ const example = new mongoose.Schema({
    reward_model_preferred_response: String,      // Maps to 'reward_model_preferred_response' in the CSV
    completed: String,  // Maps to 'overall_preference' in the CSV
    locked: String,  // Maps to 'overall_preference' in the CSV
+   current_date: String,
 });
 
 // Modify the 3rd parameter to specify which MongoDB collection to use

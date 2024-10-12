@@ -38,6 +38,9 @@ app.get('/api/examples', (request, response) => {
 app.patch('/api/annotate/example/:example_id', (request, response) => {
     console.log(request.body)
     console.log(request.body.complete)
+    const currentDate = new Date().toISOString();
+    console.log(currentDate)
+
    const body = request.body;
    Example.findByIdAndUpdate(request.params.example_id, {
        $set: {
@@ -46,7 +49,8 @@ app.patch('/api/annotate/example/:example_id', (request, response) => {
            'response2': body.response2,
            'reward_model_preferred_response': body.reward_model_preferred_response,
            'locked': true,
-           'complete': body.complete
+           'complete': body.complete,
+           'current_date': currentDate
        },
    },
    { new: true }
@@ -64,7 +68,7 @@ app.patch('/api/annotate2/example/:example_id', (request, response) => {
             'response1': body.response1,
             'response2': body.response2,
             'reward_model_preferred_response': body.reward_model_preferred_response,
-            'completed': true
+            'completed': true,
         },
     },
     { new: true }
