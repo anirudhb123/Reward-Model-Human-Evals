@@ -47,14 +47,10 @@ const WelcomePage = () => {
           
           const expirationTime = 20 * 60 * 1000; // 20 minutes in milliseconds
           const now = new Date();
-
-          console.log(response.data[0].current_date)
           
           const todoExamples = response.data.filter(
             (example) => (example.locked == "false" && example.completed == "false") ||  ((example.completed == "false" && example.current_date && ((now - new Date(example.current_date) > expirationTime))))
           )
-
-          console.log("todoExamples", todoExamples);
 
           if (todoExamples.length === 0) {
             navigate("/submission");
@@ -68,8 +64,6 @@ const WelcomePage = () => {
             
             const element = todoExamples[Math.floor(Math.random() * todoExamples.length)];
             let current_date = new Date().toISOString();
-
-            console.log(current_date)
 
             axios
             .patch(`/api/annotate/example/${element._id}`, { locked: true, current_date: current_date })

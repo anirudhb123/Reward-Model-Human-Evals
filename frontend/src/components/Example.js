@@ -94,7 +94,6 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
            justification: value
        }));
 
-       console.log(exampleAnnotation)
     };
 
     const properties = [

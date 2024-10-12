@@ -36,10 +36,7 @@ app.get('/api/examples', (request, response) => {
 
 // annotate example
 app.patch('/api/annotate/example/:example_id', (request, response) => {
-    console.log(request.body)
-    console.log(request.body.complete)
     const currentDate = new Date().toISOString();
-    console.log(currentDate)
 
    const body = request.body;
    Example.findByIdAndUpdate(request.params.example_id, {
@@ -115,8 +112,6 @@ const AnnotatedExample = mongoose.model('AnnotatedExample', annotatedExampleSche
 
 app.post('/api/annotate/example/:example_id', (request, response) => {
    const body = request.body;
-
-   console.log(body)
 
    // Create a new document using the AnnotatedExample model
    const newAnnotatedExample = new AnnotatedExample({

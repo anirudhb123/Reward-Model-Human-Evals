@@ -74,7 +74,6 @@ const AnnotationPage = (props) => {
 
     const handleButtonAction = () => {
         if (!validateAnnotations()) {
-            console.log(exampleAnnotation)
             return;
         }
 
@@ -93,7 +92,7 @@ const AnnotationPage = (props) => {
         axios
             .patch(`/api/annotate2/example/${data[currentExample]._id}`, updateData)
             .then((response) => {
-                console.log('Data updated:', updateData);
+                console.log('Data updated:');
             })
             .catch((error) => {
                 console.error('Error saving data:', error);
@@ -102,7 +101,7 @@ const AnnotationPage = (props) => {
         axios
             .post(`/api/annotate/example/${data[currentExample]._id}`, updateData)
             .then((response) => {
-                console.log('Data saved:', updateData);
+                console.log('Data saved:');
             })
             .catch((error) => {
                 console.error('Error saving data:', error);
@@ -143,7 +142,6 @@ const AnnotationPage = (props) => {
 
     const handleSelectionChange = (event) => {
         const inputValue = event.target.value;
-        console.log('Input value:', inputValue);
         setSelectedValues(inputValue); // Update the state with the new text value
     };
     
