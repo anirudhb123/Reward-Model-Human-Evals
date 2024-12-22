@@ -4,6 +4,7 @@ import { Card, Container, Row, Col, OverlayTrigger, Tooltip, Form } from 'react-
 import Slider from "./Slider";
 import OverallPreference from "./OverallPreference";
 import "./componentStyle.css";
+import ReactMarkdown from 'react-markdown'; 
 
 function NewlineText({ text }) {
     console.log(text)
@@ -122,7 +123,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                             <Card.Body>
                                 <Card.Title> {"Response 1:"} </Card.Title>
                                 <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                    {<NewlineText text={response1} />}
+                                    <ReactMarkdown>{response1}</ReactMarkdown>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -132,7 +133,7 @@ const Example = ({ query, response1, response2, exampleAnnotation, setExampleAnn
                             <Card.Body>
                                 <Card.Title> {"Response 2:"} </Card.Title>
                                 <Card.Text style={{ fontSize: '16px', textAlign: 'left' }}>
-                                {<NewlineText text={response2} />}
+                                    <ReactMarkdown>{response2}</ReactMarkdown>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
