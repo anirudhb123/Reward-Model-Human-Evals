@@ -149,21 +149,16 @@ const AnnotationPage = (props) => {
     return (
         <div align="center">
             <Alert style={{ width: "70%", marginTop: "20px", textAlign: "left", fontSize: 18, backgroundColor: 'white' }}>
-                <h3> Evaluating Language Model Responses (Main Task)</h3>
+            <h3> Evaluating Language Model Responses (Main Task)</h3>
                 <br></br>
                 Hello, and thank you for participating in our study! We are a group of researchers at the University of Pennsylvania, working on better understanding the biases present in reward models used to train AI models like ChatGPT.
                 <br></br>
                 <br></br>
                 <b>Task Overview:</b><br></br><br></br>
-                In this task, we ask you to evaluate AI model responses to queries that may be ambiguous or subjective in nature. 
-                Imagine that these queries were posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to evaluate how well each response addresses the queries and decide which one is better.<br /><br />
-                {/* Each annotation task includes 2 examples:
-                <ol>
-                    <li> <b>Example 1</b>: You will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. </li>
-                    <li> <b>Example 2</b>: You will see the same <b>query</b> along with up to 10 <b>follow-up questions</b> and the person X's <b>answers</b> to these questions, followed by <b>two AI model responses</b> to evaluate. These two responses will incorporate the person's answers to the follow-up questions.</li>
-                </ol> */}
-                For each annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. Then, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie". We also ask that you provide some reasons as to why you preferred one response to the other (if you selected "Tie", you can provide reasons for why you thought the responses were of equal quality).
-                Your thoughtful evaluations will help us better understand and improve the performance of AI models. Thank you for your participation!
+                In this task, we ask you to evaluate AI model responses to a single query that may be ambiguous or subjective in nature. 
+                Imagine that this query was posed by a real person X (such as a coworker or a friend), seeking information from an AI model. Your role is to evaluate how well each response addresses the query and decide which one is better.<br /><br />
+                For this annotation task, you will be presented with a <b>query</b> from person X and <b>two AI model responses</b> to evaluate. Then, indicate your <b>overall preference</b> for one of the two responses. If you find both responses equal in quality, you can select "Tie". We also ask that you provide some reasons as to why you preferred one response to the other (if you selected "Tie", you can provide reasons for why you thought the responses were of equal quality).<br /><br />
+                Your thoughtful evaluation of this single query will help us better understand and improve the performance of AI models. Please take approximately <b>3-4 minutes</b> to thoroughly annotate this example and provide detailed feedback. Thank you for your participation!
                 <br></br><br></br>
                 Current Example: {currentExample + 1} out of {data.length}
                 <ProgressBar
@@ -171,7 +166,7 @@ const AnnotationPage = (props) => {
                     now={((currentExample + 1) * 100.0) / data.length}
                     style={{ width: "38rem", marginTop: "20px", marginBottom: "20px" }}
                 />
-                <b>Important Note</b>: Make sure to <b>follow the instructions carefully</b> and submit all the examples!<br></br>
+                <b>Important Note</b>: Make sure to <b>follow the instructions carefully</b>
                 <b>If you do not understand the query or if an error occurs in the interface, just go to the link again, enter your ID and you will be shown a different query.</b>
             </Alert>
             <Example
