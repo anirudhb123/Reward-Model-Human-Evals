@@ -11,4 +11,4 @@ const example = new mongoose.Schema({
 });
 
 // Modify the 3rd parameter to specify which MongoDB collection to use
-module.exports = mongoose.model("Example", example, "perturbations");
+module.exports = mongoose.model("Example", example, "jargon_perturbations");
