@@ -113,7 +113,7 @@ const WelcomePage = () => {
             <p>
               {" "}
               <br></br>
-              We are a group of researchers at the University of Pennsylvania researching biases in reward models used in training LLM's. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
+              We are a group of researchers at the University of Pennsylvania investigating potential biases in how language models rank and select their responses. In this task, <b>we would like you to evaluate language model responses to user queries.</b>{" "}
             </p>
             Please enter your Prolific ID below to begin:
             <Form
