@@ -10,7 +10,7 @@ const SubmissionPage = () => {
                         <br/>
                         <p> Thank you for participating in this study. </p>
                         <p> Your completion code is: </p>
-                        <h2> C1CJQT0C </h2>
+                        <h2> C1FC9LNU </h2>
                     </Card.Text>
                 </Card.Body>
             </Card>
